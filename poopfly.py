@@ -4,7 +4,7 @@ from skatter import skatt
 from skatter import k1, k2, k3, k4
 from ormbarst_name_gen import von_ormbarst_namn
 
-fnamn = ['Isak', 'Pelle', 'Ludvig', 'Anton', 'Lizi', 'Edmund', 'Bertholowmew', 'gon', 'Filip']
+fnamn = ['Isak', 'Pelle', 'Ludvig', 'Anton', 'Lizi', 'Edmund', 'Bertholowmew', '', 'Filip']
 enamn = ['den fördärvade', 'Bajs', 'McMillen', 'Döden', 'O´ Moriah', 'Kall', 'Von Ormbarst']
 
 class karaktar:
@@ -23,7 +23,7 @@ class karaktar:
         karaktar.inventarie = inventarie
 
 sp1 = karaktar(f"{fnamn[randint(0, len(fnamn)-1)]} {enamn[randint(0, len(enamn)-1)]}", karaktar.bas_kp, karaktar.bas_sty, karaktar.bas_niva, [])#Skapar rollpersonen
-if sp1.namn[0] == 'g':
+if sp1.namn[0] == '':
     sp1.namn = von_ormbarst_namn()
 
 evigsakkvalitet = randint(1, 100) #Bestämmer startföremålets (evighetsföremålet) kvalitet
