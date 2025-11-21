@@ -5,7 +5,7 @@ from skatter import k1, k2, k3, k4
 from ormbarst_name_gen import von_ormbarst_namn
 
 fnamn = ['Isak', 'Pelle', 'Ludvig', 'Anton', 'Lizi', 'Edmund', 'Bertholowmew', '', 'Filip']
-enamn = ['den fördärvade', 'Bajs', 'McMillen', 'Döden', 'O´ Moriah', 'Kall', 'Von Ormbarst']
+enamn = [', den fördärvade', 'Bajs', 'McMillen', 'Döden', 'O´ Moriah', 'Kall', 'Von Ormbarst', ', den trosfanatiska', ', den skurna', ', den oförfärad', ', den oupplysta', ', den enigmatiska', ', den godtyckliga']
 
 class karaktar:
     bas_kp = randint(1, 5)
