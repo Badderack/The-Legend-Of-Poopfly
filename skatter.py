@@ -1,6 +1,7 @@
 from random import randint
 class skatt:
     kvalitet = 1
+    har_gett_stats = False
     def __init__(skatt, namn, kpmod, stymod, nivamod, beskrivning):
         skatt.namn = namn
         skatt.kpmod = kpmod
@@ -34,7 +35,7 @@ for i in k2:
     #     print('nivå', i.nivamod)
 #Kvalitet 3 föremål
 k3 = [
-skatt('Sten', -3, 4, 0, '"Hur kan en sten gråta?!"')
+skatt('Sten', -1, 5, 0, '"Hur kan en sten gråta?!"')
 ]
 for i in k3:
     i.kvalitet = 3 #Ger alla items i listan k3 kvalitetvärde 3
@@ -43,7 +44,8 @@ for i in k3:
 #Kvalitet 4 föremål
 k4 = [
 skatt('Helig utplånare', 0, 10, 1, '"Hellre detta än Universumsförstörare"'),
-skatt('Universumförstare', 10, 0, 1, '"Hellre detta än Helig utplånare"')
+skatt('Universumförstare', 10, 0, 1, '"Hellre detta än Helig utplånare"'),
+skatt('Glasögon', 20, 20, -1, '"20 20 vision... minus erfarenhet"')
 ]
 for i in k4:
     i.kvalitet = 4 #Ger alla items i listan k4 kvalitetvärde 4
