@@ -89,9 +89,15 @@ monsteralternativ = [ #möjliga fiender
     monster('En vild', 'Häxa', 6),
     monster('Ett vilt', 'Troll', 8),
     monster('En vild', 'Rikard', 10),
+    monster('En galen', 'Blottare', 6),
+    monster('En kittel', 'fladdermöss', 4)
 ]
 
-
+bossmonsteralternativ = [ # möjliga bossar
+    monster('Den store och mäktiga fritidsledaren: ', 'Mojje', 100),
+    monster('Den fruktansvärt (gulliga): ', 'Bleh', 77),
+    monster('"Jag skulle behöva en önskan just nu..."', 'Mortecai', 89)
+]
 
 while True: #Hela spelloopen
     rumstyp = ['monsterrum', 'skattkammare', 'skatterum', 'bossrum', 'Läkerum']
@@ -113,14 +119,14 @@ while True: #Hela spelloopen
 
         elif val == 'D':
             while True:
-                val = input(f'vilken dörr vill du öppna? \n [1] {rumstyp[0]} \n [2] {rumstyp[1]} \n [3] {rumstyp[2]} \n [4] Avbryt \n ->')
-                if val in ['1', '2', '3']:
-                    print(f'{sp1.namn} kliver in i ett {rumstyp[int(val)-1]}')
-                    break
-                elif val == '4':
+                val = input(f'Vilken dörr vill du öppna? \n [1] {rumstyp[0]} \n [2] {rumstyp[1]} \n [3] {rumstyp[2]} \n [4] Avbryt \n ->')
+                if val in ['1', '2', '3', '4']:
                     break
                 else:
-                    print('ogiltigt val, välj igen')
+                    print('Ogiltigt val: välj igen')
+                    continue
+            if val in ['1', '2', '3']:
+                print(f'{sp1.namn} kliver in i ett {rumstyp[int(val)-1]}')
                 break
 
         elif val == 'F':
@@ -128,3 +134,6 @@ while True: #Hela spelloopen
 
         else:
             continue
+        
+    print(f'Vi har fixat det, här kollas och öppnas ett rum!') #Rumskod:
+    break
