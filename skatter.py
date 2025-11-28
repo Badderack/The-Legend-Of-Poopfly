@@ -1,7 +1,7 @@
 from random import randint
 class skatt:
     kvalitet = 1
-    har_gett_stats = False
+    mod_ar_mult = False
     def __init__(skatt, namn, kpmod, stymod, nivamod, beskrivning):
         skatt.namn = namn
         skatt.kpmod = kpmod
@@ -15,7 +15,8 @@ k1 = [
 skatt('Teleskop', 0, 0, 0, '"Ökad sikt"'),
 skatt('Spade', 0, 1, 0, '"Gräva gräva hål!"'),
 skatt('Nagelfil', 0, 2, 0, '"Skönhet dödar!"'),
-skatt('Tändare', 0, 1, 0, '"Hmmm. Jag undrar om dem kan brinna..."')
+skatt('Tändare', 0, 1, 0, '"Hmmm. Jag undrar om dem kan brinna..."'),
+skatt('Spray Deoderant', 1, 0, 0, '"Teknik elevernas mardröm"')
 ]
 
 #Kvalitet 2 föremål
@@ -36,9 +37,10 @@ for i in k3:
 
 #Kvalitet 4 föremål
 k4 = [
-skatt('Helig utplånare', 0, 10, 1, '"Hellre detta än Universumsförstörare"'),
-skatt('Universumförstare', 10, 0, 1, '"Hellre detta än Helig utplånare"'),
-skatt('Glasögon', 20, 20, -1, '"20/20 syn... minus erfarenhet"')
+skatt('Helig utplånare', 0, 2, 1, '"Hellre detta än Universumsförstörare"'),
+skatt('Universumförstare', 2, 0, 1, '"Hellre detta än Helig utplånare"'),
+skatt('Glasögon', 1.4, 1.4, -1, '"20/20 syn... minus erfarenhet"')
 ]
 for i in k4:
     i.kvalitet = 4 #Ger alla items i listan k4 kvalitetvärde 4
+    i.mod_ar_mult = True

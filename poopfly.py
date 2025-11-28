@@ -4,12 +4,12 @@ from skatter import skatt
 from skatter import k1, k2, k3, k4
 from ormbarst_name_gen import von_ormbarst_namn
 
-fnamn = ['Isak', 'Pelle', 'Ludvig', 'Anton', 'Lizi', 'Edmund', 'Bertholowmew', 'gon', 'Filip']
+fnamn = ['Isak', 'Pelle', 'Ludvig', 'Anton', 'Lizi', 'Edmund', 'Bertholowmew', 'gon', 'Filip', 'Holger']
 enamn = [', den fördärvade', ' Bajs', ' McMillen', ' Döden', ' O´ Moriah', ' Kall', ' Von Ormbarst', ', den trosfanatiska', ', den skurna', ', den oförfärad', ', den oupplysta', ', den enigmatiska', ', den godtyckliga']
 
 class karaktar:
-    bas_kp = randint(1, 5)
-    bas_sty = randint(5, 15)//bas_kp
+    bas_kp = randint(5, 10)
+    bas_sty = randint(25, 50)//bas_kp
     bas_niva = 0
     kpmod = 0
     stymod = 0
@@ -26,16 +26,22 @@ class karaktar:
         self.kpmod = 0
         self.stymod = 0
         self.nivamod = 0
+        stymult = 1
+        kpmult = 1
         for i in range(len(self.inventarie)):
-            self.kpmod += self.inventarie[i - 1].kpmod
-            self.stymod += self.inventarie[i -1].stymod
-            self.nivamod += self.inventarie[i - 1].nivamod
-        if self.bas_kp + self.kpmod < 1:
-            self.kp = 1
+            if self.inventarie[i - 1].mod_ar_mult == True:
+                stymult += self.inventarie[i - 1].kpmod
+                kpmult += self.inventarie[i - 1].stymod
+            else:
+                self.kpmod += self.inventarie[i - 1].kpmod
+                self.stymod += self.inventarie[i -1].stymod
+                self.nivamod += self.inventarie[i - 1].nivamod
+        if self.bas_kp + self.kpmod * kpmult < 1:
+                self.kp = 1
         else:
-            self.kp = self.bas_kp + self.kpmod
-            self.sty = self.bas_sty + self.stymod
-            self.niva = self.bas_niva + self.nivamod
+            self.kp = self.bas_kp + self.kpmod * kpmult + self.niva
+        self.sty = self.bas_sty + self.stymod * stymult + self.niva
+        self.niva = self.bas_niva + self.nivamod
         if self.kp - self.skada < 1:
             quit('Förlust: Du har tagit mer träffar än du har KP!')
 
@@ -48,6 +54,8 @@ def tilvinna_skatt(self, skatt):
         val = input(f'''Vilken skatt i din ryggsäck vill du byta ut??
             {output}
             -> ''').upper()
+        if val in str(range(1, len(self.inventarie))):
+            self.inventarie.pop(int(val))
 
 
 
@@ -78,29 +86,31 @@ else:
 #Alla våra monster:
 
 class monster: #strukturen alla monster följer
-    def __init__(monster, genus, monstertyp, sty):
+    def __init__(monster, genus, monstertyp, sty, kp):
         monster.genus = genus
         monster.monstertyp = monstertyp
         monster.sty = sty
+        monster.kp = kp
 
 monsteralternativ = [ #möjliga fiender
-    monster('En vild', 'Guldfisk', 2),
-    monster('En vild', 'Goblin', 4),
-    monster('En vild', 'Häxa', 6),
-    monster('Ett vilt', 'Troll', 8),
-    monster('En vild', 'Rikard', 10),
-    monster('En galen', 'Blottare', 6),
-    monster('En kittel', 'fladdermöss', 4)
+    monster('En vild', 'Guldfisk', 2, 1),
+    monster('En vild', 'Goblin', 4, 1),
+    monster('En vild', 'Häxa', 6, 1),
+    monster('Ett vilt', 'Troll', 8, 1),
+    monster('En vild', 'Rikard', 10, 1),
+    monster('En galen', 'Blottare', 6, 1),
+    monster('En kittel', 'fladdermöss', 4, 1)
 ]
 
 bossmonsteralternativ = [ # möjliga bossar
-    monster('Den store och mäktiga fritidsledaren: ', 'Mojje', 100),
-    monster('Den fruktansvärt (gulliga): ', 'Bleh', 77),
-    monster('"Jag skulle behöva en önskan just nu..."', 'Mortecai', 89)
+    monster('Den store och mäktiga fritidsledaren: ', 'Mojje', 100, 100),
+    monster('Den fruktansvärt (gulliga): ', 'Bleh', 77, 77),
+    monster('"Jag skulle behöva en önskan just nu..."', 'Mortecai', 89, 50),
+    monster('Den', 'den', 1, 1)
 ]
 
 while True: #Hela spelloopen
-    rumstyp = ['monsterrum', 'skattkammare', 'skatterum', 'bossrum', 'Läkerum']
+    rumstyp = ['monsterrum', 'skattkammare', 'skatterum', 'bossrum', 'läkerum']
     while len(rumstyp) > 3:
         rumstyp.pop(randint(0, len(rumstyp)-1))
     print(f"{sp1.namn} ser tre dörrar {rumstyp}.")
@@ -115,7 +125,10 @@ while True: #Hela spelloopen
         
         if val == 'R':
             for i in range(len(sp1.inventarie)):
-                print(f'{i+1}. {sp1.inventarie[i - 1].namn} | Kvalitet: {sp1.inventarie[i - 1].kvalitet}\n  {sp1.inventarie[i - 1].beskrivning}\n   KP mod: {sp1.inventarie[i - 1].kpmod} | STY mod: {sp1.inventarie[i -1].stymod} | Nivå mod: {sp1.inventarie[i - 1].nivamod}\n')
+                mod = 'mod'
+                if sp1.inventarie[i - 1].mod_ar_mult == True:
+                    mod = 'mult'
+                print(f'{i+1}. {sp1.inventarie[i - 1].namn} | Kvalitet: {sp1.inventarie[i - 1].kvalitet}\n  {sp1.inventarie[i - 1].beskrivning}\n   KP {mod}: {sp1.inventarie[i - 1].kpmod} | STY {mod}: {sp1.inventarie[i -1].stymod} | Nivå mod: {sp1.inventarie[i - 1].nivamod}\n')
 
         elif val == 'D':
             while True:
@@ -130,10 +143,56 @@ while True: #Hela spelloopen
                 break
 
         elif val == 'F':
-            print(f'{sp1.namn + plural} färdigheter:\n  Nivå: {sp1.niva} | KP: {sp1.kp} | STY: {sp1.sty}')
+            print(f'{sp1.namn + plural} färdigheter:\n  Nivå: {sp1.niva} | KP: {sp1.kp} / {sp1.kp + sp1.skada} | STY: {sp1.sty}')
 
         else:
             continue
         
-    print(f'Vi har fixat det, här kollas och öppnas ett rum!') #Rumskod:
-    break
+    if rumstyp[int(val)-1] == 'monsterrum':
+        
+        fiende = monsteralternativ[randint(0, len(monsteralternativ)-1)] #Väljer en fiende till just detta rum
+        print(f"{fiende.genus} {fiende.monstertyp} dyker upp!")
+        print(f"Den har styrkan {fiende.sty}")
+        print(f"{sp1.namn}{plural} styrka är {sp1.sty}")
+
+        time.sleep(0.5)
+
+        (input("här kommer du få fatta beslut, men inte riktigt än :/ (skriv något och tryck enter) \n\n"))
+
+
+        if sp1.sty > fiende.sty: #kollar vem som vinner
+            print(f"{sp1.namn} besegrade {fiende.monstertyp} och gick upp en nivå! \n\n")
+            sp1.niva += 1 #sp1 går upp en nivå
+        elif sp1.sty == fiende.sty: 
+            print(f"Det var en svår strid, utan wiener. Du tar ingen skada men går inte upp en nivå. \n\n")
+        else:
+            print(f"{sp1.namn} blev besegrad av {fiende.monstertyp} och förlorade 1 kp. \n\n")
+            sp1.skada += 1
+
+        time.sleep(0.5)
+
+        print(f"{sp1.namn} har {sp1.kp - sp1.skada} kp kvar.")
+        print(f"{sp1.namn} är nivå {sp1.niva}.")
+    
+    elif rumstyp[int(val)-1] == 'skattkammare':
+        evigsakkvalitet = randint(1, 100)
+        if evigsakkvalitet >= 96 and len(k4) > 0:
+            tillvunnet_foremal = k4[randint(0, len(k4) - 1)]
+            k4.remove(tillvunnet_foremal)
+        elif evigsakkvalitet >= 81 and len(k3) > 0:
+            tillvunnet_foremal = k3[randint(0, len(k3) - 1)]
+            k3.remove(tillvunnet_foremal)
+        elif evigsakkvalitet > 61 and len(k2) > 0:
+            tillvunnet_foremal = k2[randint(0, len(k2) - 1)]
+            k2.remove(tillvunnet_foremal)
+        elif len(k1) > 0:
+            tillvunnet_foremal = k1[randint(0, len(k1) - 1)]
+            k1.remove(tillvunnet_foremal)
+        else:
+            tillvunnet_foremal = skatt('Poopfly', -100, -100, 10, '"Wow, den suger verkligen mer än vad jag trodde..."')
+        sp1.tilvinna_skatt(tillvunnet_foremal)
+    # elif rumstyp[int(val)-1] == 'skatterum':
+
+    # elif rumstyp[int(val)-1] == 'bossrum':
+
+    # elif rumstyp[int(val)-1] == 'läkerum':
