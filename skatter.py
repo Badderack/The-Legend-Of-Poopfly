@@ -23,7 +23,7 @@ skatt('Teleskop', 0, 0, 0, '"Ökad sikt"'),
 skatt('Spade', 0, 1, 0, '"Gräva gräva hål!"'),
 skatt('Nagelfil', 0, 2, 0, '"Skönhet dödar!"'),
 skatt('Tändare', 0, 1, 0, '"Hmmm. Jag undrar om dem kan brinna..."'),
-skatt('Spray Deoderant', 1, 0, 0, '"Teknik elevernas mardröm"')
+skatt('Spray Deoderant', 1, 0, 0, '"Teknikelevernas mardröm"')
 ]
 
 #Kvalitet 2 föremål

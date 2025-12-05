@@ -83,10 +83,6 @@ else:
     evigsakkvalitet = k1
 
 sp1.inventarie.append(evigsakkvalitet[randint(0, len(evigsakkvalitet)-1)]) #Föremålet läggs till i spelare 1s inventraie
-sp1.inventarie.append(skatt('Två', 0, 0, 0, 'Test'))
-sp1.inventarie.append(skatt('Tre', 0, 0, 0, 'Test'))
-sp1.inventarie.append(skatt('Fyra', 0, 0, 0, 'Test'))
-sp1.inventarie.append(skatt('Fem', 0, 0, 0, 'Test'))
 print(sp1.namn)
 print('KP:', sp1.kp)
 print('STY', sp1.sty)
