@@ -37,12 +37,13 @@ class karaktar:
                 self.kpmod += self.inventarie[i - 1].kpmod
                 self.stymod += self.inventarie[i -1].stymod
                 self.nivamod += self.inventarie[i - 1].nivamod
+        
+        self.niva = self.bas_niva + self.nivamod
         if self.bas_kp + self.kpmod * kpmult < 1:
                 self.kp = 1
         else:
             self.kp = self.bas_kp + self.kpmod * kpmult + self.niva
         self.sty = self.bas_sty + self.stymod * stymult + self.niva
-        self.niva = self.bas_niva + self.nivamod
         if self.niva >= 10:
             if self.kp -self.skada < 1:
                 quit('Du vann och dog samtidigt... galet...')
@@ -72,17 +73,17 @@ sp1 = karaktar(f"{fnamn[randint(0, len(fnamn)-1)]}{enamn[randint(0, len(enamn)-1
 if sp1.namn[0] == 'g':
     sp1.namn = von_ormbarst_namn()
 
-evigsakkvalitet = randint(1, 100) #Bestämmer startföremålets (evighetsföremålet) kvalitet
-if evigsakkvalitet >= 96:
-    evigsakkvalitet = k4
-elif evigsakkvalitet >= 81:
-    evigsakkvalitet = k3
-elif evigsakkvalitet > 61:
-    evigsakkvalitet = k2
+foremal_kvalitet = randint(1, 100) #Bestämmer startföremålets (evighetsföremålet) kvalitet
+if foremal_kvalitet >= 96:
+    foremal_kvalitet = k4
+elif foremal_kvalitet >= 81:
+    foremal_kvalitet = k3
+elif foremal_kvalitet > 61:
+    foremal_kvalitet = k2
 else:
-    evigsakkvalitet = k1
+    foremal_kvalitet = k1
 
-sp1.inventarie.append(evigsakkvalitet[randint(0, len(evigsakkvalitet)-1)]) #Föremålet läggs till i spelare 1s inventraie
+sp1.inventarie.append(foremal_kvalitet[randint(0, len(foremal_kvalitet)-1)]) #Föremålet läggs till i spelare 1s inventraie
 print(sp1.namn)
 print('KP:', sp1.kp)
 print('STY', sp1.sty)
@@ -165,12 +166,25 @@ while True: #Hela spelloopen
 
         time.sleep(0.5)
 
-        (input("här kommer du få fatta beslut, men inte riktigt än :/ (skriv något och tryck enter) \n\n"))
-
+        while True:
+                val = input(f'''Vad vill du göra?
+                                Kolla [R]yggsäcken
+                                Slå mot [{fiende.monstertyp[0]}]{fiende.monstertyp[1:]}
+                                Kolla [F]ärdigheter 
+                                -> ''').upper()
+                if val == 'R':
+                    for i in range(len(sp1.inventarie)):
+                        print(f'{i+1}.{print_skatt(sp1.inventarie[i - 1])}')
+                elif val == fiende.monstertyp[0].upper():
+                    break
+                elif val == 'F':
+                    print(f'{sp1.namn + plural} färdigheter:\n  Nivå: {sp1.niva} | KP: {sp1.kp} / {sp1.kp + sp1.skada} | STY: {sp1.sty}')
+                else:
+                    continue
 
         if sp1.sty > fiende.sty: #kollar vem som vinner
             print(f"{sp1.namn} besegrade {fiende.monstertyp} och gick upp en nivå! \n\n")
-            sp1.niva += 1 #sp1 går upp en nivå
+            sp1.bas_niva += 1 #sp1 går upp en nivå
         elif sp1.sty == fiende.sty: 
             print(f"Det var en svår strid, utan wiener. Du tar ingen skada men går inte upp en nivå. \n\n")
         else:
@@ -180,18 +194,18 @@ while True: #Hela spelloopen
         time.sleep(0.5)
 
         print(f"{sp1.namn} har {sp1.kp - sp1.skada} kp kvar.")
-        print(f"{sp1.namn} är nivå {sp1.niva}.")
+        print(f"{sp1.namn} är nivå {sp1.niva + 1}.")
     
     
     elif rumstyp[int(val)-1] == 'skattkammare': #SKATTKAMMARE
-        evigsakkvalitet = randint(1, 100)
-        if evigsakkvalitet >= 96 and len(k4) > 0:
+        foremal_kvalitet = randint(1, 100)
+        if foremal_kvalitet >= 96 and len(k4) > 0:
             tillvunnet_foremal = k4[randint(0, len(k4) - 1)]
             k4.remove(tillvunnet_foremal)
-        elif evigsakkvalitet >= 81 and len(k3) > 0:
+        elif foremal_kvalitet >= 81 and len(k3) > 0:
             tillvunnet_foremal = k3[randint(0, len(k3) - 1)]
             k3.remove(tillvunnet_foremal)
-        elif evigsakkvalitet > 61 and len(k2) > 0:
+        elif foremal_kvalitet > 61 and len(k2) > 0:
             tillvunnet_foremal = k2[randint(0, len(k2) - 1)]
             k2.remove(tillvunnet_foremal)
         elif len(k1) > 0:
