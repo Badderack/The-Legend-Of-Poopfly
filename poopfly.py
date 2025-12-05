@@ -43,7 +43,11 @@ class karaktar:
             self.kp = self.bas_kp + self.kpmod * kpmult + self.niva
         self.sty = self.bas_sty + self.stymod * stymult + self.niva
         self.niva = self.bas_niva + self.nivamod
-        if self.kp - self.skada < 1:
+        if self.niva >= 10:
+            if self.kp -self.skada < 1:
+                quit('Du vann och dog samtidigt... galet...')
+            quit('Du vann spelet!!!!!!!!')
+        elif self.kp - self.skada < 1:
             quit('Förlust: Du har tagit mer träffar än du har KP!')
 
 def tilvinna_skatt(self, skatt):
@@ -51,13 +55,14 @@ def tilvinna_skatt(self, skatt):
     self.inventarie.append(skatt)
     if len(self.inventarie) > 5:
         for i in range(0, len(self.inventarie)):
-            output += f'{i+1}. {self.inventarie[i - 1].namn} | Kvalitet: {self.inventarie[i - 1].kvalitet}\n  {self.inventarie[i - 1].beskrivning}\n   KP mod: {self.inventarie[i - 1].kpmod} | STY mod: {self.inventarie[i -1].stymod} | Nivå mod: {self.inventarie[i - 1].nivamod}\n\n'
+            output += f'{i + 1}. {print_skatt(self.inventarie[i])}\n\n'
         print(output)
         while True:
             val = input(f'Vilken skatt i din ryggsäck vill du byta ut??->')
             if int(val) in range(1, len(self.inventarie) + 1):
-                val = input(f'Är du säker på att du vill byta ut {self.inventarie[int(val) - 1].namn}?')
-                self.inventarie.pop(int(val))
+                val = input(f'Är du säker på att du vill byta ut {self.inventarie[int(val) - 1].namn}? J/N')
+                if val == 'J':
+                    self.inventarie.pop(int(val) - 1)
             else:
                 print('Skriv siffran som representerar föremålet du vill byta ut (1, 2, 3, 4, 5, 6)')
 
@@ -117,7 +122,7 @@ bossmonsteralternativ = [ # möjliga bossar
     monster('Den', 'den', 1, 1)
 ]
 
-attackbeskrivning = ['slår {sp1.namn}', 'sparkar {sp1.namn}', 'klöser {sp1.namn} med tånaglarna', 'biter {sp1.namn}', 'slickar {sp1.namn}', 'sticker {sp1.namn} med sin {monster.vapen}', 'krossar {sp1.namn} med {monster.vapen}',]
+attackbeskrivning = [f'slår {sp1.namn}', 'sparkar {sp1.namn}', 'klöser {sp1.namn} med tånaglarna', 'biter {sp1.namn}', 'slickar {sp1.namn}', 'sticker {sp1.namn} med sin {monster.vapen}', 'krossar {sp1.namn} med {monster.vapen}',]
 
 while True: #Hela spelloopen
     rumstyp = ['monsterrum', 'skattkammare', 'skatterum', 'bossrum', 'läkerum']
@@ -258,4 +263,5 @@ while True: #Hela spelloopen
     
     
     elif rumstyp[int(val)-1] == 'läkerum': #HELNING
-        print('läkerum')
+        sp1.skada = sp1.skada - randint(1,3)
+        print('Du har nu helats!')
