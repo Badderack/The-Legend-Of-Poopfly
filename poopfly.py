@@ -39,23 +39,31 @@ class karaktar:
                 self.nivamod += self.inventarie[i - 1].nivamod
         
         self.niva = self.bas_niva + self.nivamod
+        if self.skada < 0:
+            self.skada = 0
         if self.bas_kp + self.kpmod * kpmult < 1:
                 self.kp = 1
         else:
             self.kp = self.bas_kp + self.kpmod * kpmult + (self.niva * 2)
         self.sty = self.bas_sty + self.stymod * stymult + (self.niva * 2)
         if self.niva >= 10:
-            if self.kp -self.skada < 1:
+            if self.kp - self.skada < 1:
                 quit('Du vann och dog samtidigt... galet...')
             quit('Du vann spelet!!!!!!!!')
         elif self.kp - self.skada < 1:
             quit('Förlust: Du har tagit mer träffar än du har KP!')
 
-def avskaffa_skatt(self):
+def print_inventory(self):
     output = ''
-    for i in range(0, len(self.inventarie)):
-        output += f'{i + 1}. {print_skatt(self.inventarie[i])}\n\n'
-    print(output)
+    for i in range(len(sp1.inventarie)):
+        output += f'{i+1}.{print_skatt(sp1.inventarie[i])}\n\n'
+    return(output)
+def print_player_stats(self):
+    output = f'{self.namn + plural} färdigheter:\n  Nivå: {self.niva} | KP: {self.kp - self.skada} / {self.kp} | STY: {self.sty}'
+    return(output)
+
+def avskaffa_skatt(self):
+    print(print_inventory(self))
     while True:
         val = input(f'Vilken skatt i din ryggsäck vill du byta ut??->')
         if int(val) in range(1, len(self.inventarie) + 1):
@@ -141,8 +149,7 @@ while True: #Hela spelloopen
                     -> ''').upper()
         
         if val == 'R':
-            for i in range(len(sp1.inventarie)):
-                print(f'{i+1}.{print_skatt(sp1.inventarie[i - 1])}')
+            print(print_inventory(sp1))
         elif val == 'D':
             while True:
                 val = input(f'Vilken dörr vill du öppna? \n [1] {rumstyp[0]} \n [2] {rumstyp[1]} \n [3] {rumstyp[2]} \n [4] Avbryt \n ->')
@@ -157,8 +164,7 @@ while True: #Hela spelloopen
                 break
 
         elif val == 'F':
-            print(f'{sp1.namn + plural} färdigheter:\n  Nivå: {sp1.niva} | KP: {sp1.kp} / {sp1.kp + sp1.skada} | STY: {sp1.sty}')
-
+            print(print_player_stats(sp1))
         else:
             continue
         
@@ -172,18 +178,21 @@ while True: #Hela spelloopen
         time.sleep(0.5)
 
         while True:
+                monster_efterfoljande_bokstaver = 1
+                if fiende.monstertyp[0] == 'R' or fiende.monstertyp[0] == 'F':
+                    monster_bokstav = f'[{fiende.monstertyp[0]}{fiende.monstertyp[1]}]'
+                    monster_efterfoljande_bokstaver = 2
                 val = input(f'''Vad vill du göra?
                                 Kolla [R]yggsäcken
-                                Slå mot [{fiende.monstertyp[0]}]{fiende.monstertyp[1:]}
+                                Slå mot [{fiende.monstertyp[0]}]{fiende.monstertyp[monster_efterfoljande_bokstaver:]}
                                 Kolla [F]ärdigheter 
-                                -> ''').upper()
-                if val == 'R':
-                    for i in range(len(sp1.inventarie)):
-                        print(f'{i+1}.{print_skatt(sp1.inventarie[i - 1])}')
-                elif val == fiende.monstertyp[0].upper():
+                                -> ''')
+                if val.upper() == 'R':
+                    print(print_inventory(sp1))
+                elif val == monster_bokstav:
                     break
-                elif val == 'F':
-                    print(f'{sp1.namn + plural} färdigheter:\n  Nivå: {sp1.niva} | KP: {sp1.kp} / {sp1.kp + sp1.skada} | STY: {sp1.sty}')
+                elif val.upper() == 'F':
+                    print(print_player_stats(sp1))
                 else:
                     continue
 
