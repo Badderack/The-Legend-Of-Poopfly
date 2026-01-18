@@ -318,9 +318,9 @@ monsteralternativ = [ #möjliga fiender
 ]
 
 bossmonsteralternativ = [ # möjliga bossar
-    monster('Den store och mäktiga fritidsledaren: ', 'Mojje', randint(10, 30), sp1.niva * randint(30,50)),
-    monster('Den fruktansvärt (gulliga): ', 'Bleh', randint(5,15), sp1.niva * randint(10,30)),
-    monster('"Jag skulle behöva en önskan just nu..."', 'Mortecai', randint(10,20), sp1.niva * randint(20,40)),
+    monster('Den store och mäktiga fritidsledaren: ', 'Mojje', randint(10, 30), sp1.niva+1 * randint(30,50)),
+    monster('Den fruktansvärt (gulliga): ', 'Bleh', randint(5,15), sp1.niva+1 * randint(10,30)),
+    monster('"Jag skulle behöva en önskan just nu..."', 'Mortecai', randint(10,20), sp1.niva+1 * randint(20,40)),
     monster('Den', 'den', 1, 1)
 ]
 
