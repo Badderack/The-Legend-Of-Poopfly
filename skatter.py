@@ -48,17 +48,17 @@ skatt('Ring', 2, 2, 1, '"Det är ju jag!" - Alwin Ring \n "En skapades för att 
 skatt('Liten Anton', 1, 5, 1, '"Minibassist i Ormbarst"', 3),
 skatt('Liten Ludvig',1, 5, 1, '"Minigitarrist i Ormbarst"', 3),
 skatt('Liten Lizi', 1, 5, 1, '"Mini day one till Ormbarst"', 3),
-skatt('Minikit', 0, 4, 2, '"Kai"', 0)
+skatt('Minikit', 0, 4, 2, '"Lego Curinirs stolthet"', 0)
 ]
 for i in k3:
     i.kvalitet = 3 #Ger alla items i listan k3 kvalitetvärde 3
 
 #Kvalitet 4 föremål
 k4 = [
-skatt('Helig utplånare', 0, 2, 1, '"Hellre detta än Universumsförstörare"', 4),
-skatt('Universumförstare', 2, 0, 1, '"Hellre detta än Helig utplånare"', 4),
+skatt('Helig utplånare', 1, 2, 1, '"Hellre detta än Universumsförstörare"', 4),
+skatt('Universumförstare', 2, 1, 1, '"Hellre detta än Helig utplånare"', 4),
 skatt('Glasögon', 1.6, 1.6, -1, '"20/20 syn... minus erfarenhet"', 0),
-skatt('Lillens spratt', 1.1, 1.5, 0, '"Bam bam!"', 5)
+skatt('Lillens spratt', 1, 2, 0, '"Bam bam!"', 5)
 ]
 for i in k4:
     i.kvalitet = 4 #Ger alla items i listan k4 kvalitetvärde 4
