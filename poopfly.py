@@ -324,7 +324,7 @@ bossmonsteralternativ = [ # möjliga bossar
     monster('Den', 'den', 1, 1)
 ]
 
-attackbeskrivning = [f'slår {sp1.namn}', f'sparkar {sp1.namn}', f'klöser {sp1.namn} med tånaglarna', f'biter {sp1.namn}', f'slickar {sp1.namn}', 'sticker {sp1.namn}', 'krossar {sp1.namn}',] #kul beskrivning för hur spelaren attackeras.
+attackbeskrivning = [f'slår {sp1.namn}', f'sparkar {sp1.namn}', f'klöser {sp1.namn} med tånaglarna', f'biter {sp1.namn}', f'slickar {sp1.namn}', f'sticker {sp1.namn}', f'krossar {sp1.namn}',] #kul beskrivning för hur spelaren attackeras.
 
 
 starttid = time.time() #startar en timer för spelet
