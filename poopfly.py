@@ -7,7 +7,7 @@ from skatter import k1, k2, k3, k4
 from ormbarst_name_gen import von_ormbarst_namn
 from collections import Counter
 
-def slow(text, delay=0.04): #tar input i text och sekunder delay
+def slow(text, delay=0.03): #tar input i text och sekunder delay
     for char in text:
         print (char, end='', flush=True) #skriver ut et
         time.sleep(delay) #väntar delay sekunder innan nästa tecken
@@ -425,7 +425,7 @@ while True: #Hela spelloopen
             slow(f'Det var en svår strid, utan segrare. {sp1.namn} tar ingen skada men går inte upp en nivå. \n')
         else: #om spelaren förlorar
             slow(f'{sp1.namn} blev besegrad av {fiende.monstertyp} och förlorade 1 kp. \n')
-            sp1.skada += randint(1, monster.sty) #sp1 tar skada
+            sp1.skada += randint(1, fiende.sty) #sp1 tar skada
 
         time.sleep(1)
 
