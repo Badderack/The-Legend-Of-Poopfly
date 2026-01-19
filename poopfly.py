@@ -538,12 +538,12 @@ while True: #Hela spelloopen
 
     elif rumstyp[int(val)-1] == 'bossrum':
         sp1.ge_stats()
-        fiende = bossmonsteralternativ[randint(0, len(bossmonsteralternativ)-1)]
-        slow(f'I ett bossrum kommer turer att utkämpas tills spelaren eller bossen är döda, eller spelaren lyckas fly. Spelaren kommer bli slagen upp till bossens sty och spelaren slår upp till sin sty, mellan varje tur kan föremål användas.\n')
+        fiende = bossmonsteralternativ[randint(0, len(bossmonsteralternativ)-1)] #skapar en bossfiende från bossmonsteralternativ
+        slow(f'I ett bossrum kommer turer att utkämpas tills spelaren eller bossen är döda. Spelaren kommer bli slagen upp till bossens sty och spelaren slår upp till sin sty, mellan varje tur kan föremål användas.\n')
         time.sleep(2)
         slow(f'Plötsligt dyker {fiende.genus} {fiende.monstertyp} upp och ger dig en fördärvande blick!\n')
         
-        while fiende.kp > 0:
+        while fiende.kp > 0: #Du strider tills fienden eller du är död
             slow(f'{fiende.monstertyp} gör upp till {fiende.sty} skada!!!\n')
             time.sleep(1)
             slow(f'{fiende.monstertyp} har {fiende.kp} kp\n')
@@ -567,18 +567,18 @@ while True: #Hela spelloopen
                     continue
 
 
-            slag = randint(1, fiende.sty)
-            slow(f'{fiende.monstertyp} {attackbeskrivning[randint(0, len(attackbeskrivning)-1)]} och gör {slag} skada!\n')
-            sp1.skada += slag
+            slag = randint(1, fiende.sty) #fiendens attack
+            slow(f'{fiende.monstertyp} {attackbeskrivning[randint(0, len(attackbeskrivning)-1)]} och gör {slag} skada!\n') #beskriver attacken från slumplistan attackbeskrivning
+            sp1.skada += slag #spelaren tar slag skada
             time.sleep(1)
-            slag = randint(1, sp1.sty)
+            slag = randint(1, sp1.sty) #sp1s attack
             slow(f'{sp1.namn} slår {fiende.monstertyp} och gör {slag} skada\n')
-            fiende.kp -= slag
-            sp1.ge_stats()
+            fiende.kp -= slag #fienden tar skada
+            sp1.ge_stats() #kollar nivå, stats, sp1.kp och allt annat som behöver kollas varje gång det är möjligt
 
-
-        slow(f'{sp1.namn} besegrade {fiende.monstertyp}!\n')
-        foremal_kvalitet = randint(1,100)
+       
+        slow(f'{sp1.namn} besegrade {fiende.monstertyp}!\n') #spelaren får skatt om bossen besegras
+        foremal_kvalitet = randint(1,100) #vikt för sällsyntare skatter
         while True:
             if foremal_kvalitet >= 51:
                 if len(k4) > 0:
@@ -643,4 +643,4 @@ while True: #Hela spelloopen
             slow(f'OJ! {sp1.namn} klev in i en FÄLLA men undvek den, ingen skada tagen!\n\n')
         else:
             slow(f'AJ! {sp1.namn} klev in i en FÄLLA och tog {fallskada} skada!\n\n')
-            sp1.skada += fallskada
+            sp1.skada += fallskada #spelaren tar skada
