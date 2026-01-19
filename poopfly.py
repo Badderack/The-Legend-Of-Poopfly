@@ -69,8 +69,8 @@ class karaktar: #Strukturen för spelarkaraktären
         kpmult = 1
         for i in range(len(self.inventarie)): #applicerar föremålens modifikationer på karaktären, förändringarna kommer från filen skatter.py
             if self.inventarie[i].mod_ar_mult == True:
-                stymult += self.inventarie[i].kpmod
-                kpmult += self.inventarie[i].stymod
+                stymult += self.inventarie[i].stymod
+                kpmult += self.inventarie[i].kpmod
             else:
                 self.kpmod += self.inventarie[i].kpmod
                 self.stymod += self.inventarie[i].stymod
@@ -434,6 +434,7 @@ while True: #Hela spelloopen
                         print('Du har inga föremål')
                     for i in range(len(sp1.inventarie)):
                         print(f'{i+1}.{print_skatt(sp1.inventarie[i - 1])}\n')
+                    print()
                 elif val == 'M':
                     break
                 elif val == 'F':
@@ -450,14 +451,11 @@ while True: #Hela spelloopen
             slag = randint(1, fiende.sty) #sp1 tar skada
             slow(f'{sp1.namn} blev besegrad av {fiende.monstertyp} och förlorade {slag} kp. \n')
             sp1.skada += slag
-           
-
+        
+        time.sleep(1)
+        slow(f"{sp1.namn} har {sp1.kp - sp1.skada} kp kvar.\n\n{sp1.namn} är nivå {sp1.niva +1}.")
         time.sleep(1)
 
-        slow(f"{sp1.namn} har {sp1.kp - sp1.skada} kp kvar.")
-        time.sleep(1)
-        slow(f"{sp1.namn} är nivå {sp1.niva +1}.")
-    
     #SKATTKAMMARE, rum att få skatter i
 
     elif rumstyp[int(val)-1] == 'rum med skatter': 
@@ -499,6 +497,7 @@ while True: #Hela spelloopen
         slow('I skattkammaren finns det:\n')
         time.sleep(1)
         print(f'  {print_skatt(tillvunnet_foremal)}')
+        time.sleep(1)
         while True:
             val = input('Vill du plocka upp den? J/N -> \n').upper()
             if val == 'J':
@@ -521,7 +520,8 @@ while True: #Hela spelloopen
         slow('"gadd eller kladd"\n\n')
         time.sleep(1)
         for i in range(len(sp1.inventarie)):
-                print(f'{i+1}.{print_skatt(sp1.inventarie[i - 1])}')
+            print(f'{i+1}.{print_skatt(sp1.inventarie[i - 1])}')
+        print()
         while True:
             val = input('Vad vill du betala i skatt? 1 [S]katt eller 2 [K]P ->').upper()
             if val == 'S' or val == 'K':
@@ -576,7 +576,7 @@ while True: #Hela spelloopen
             fiende.kp -= slag #fienden tar skada
             sp1.ge_stats() #kollar nivå, stats, sp1.kp och allt annat som behöver kollas varje gång det är möjligt
 
-       
+
         slow(f'{sp1.namn} besegrade {fiende.monstertyp}!\n') #spelaren får skatt om bossen besegras
         foremal_kvalitet = randint(1,100) #vikt för sällsyntare skatter
         while True:
@@ -629,11 +629,13 @@ while True: #Hela spelloopen
 
     # LÄKERUM, spelaren helas
 
-    elif rumstyp[int(val)-1] == 'läkerum': 
+    elif rumstyp[int(val)-1] == 'läkerum':
+        val = sp1.skada
         sp1.skada = sp1.skada - randint(1, sp1.kp//2) #spelaren läker mellan 1 och halva sin kp
         if sp1.skada <= 0:
             sp1.skada = 0
-        slow(f'{sp1.namn} är nu hel!\n\n')
+        slow(f'{sp1.namn} helar {val - sp1.skada} KP\n{sp1.namn} är nu hel!\n\n')
+        time.sleep(1)
     
     # FÄLLA, spelaren tar skada
     
