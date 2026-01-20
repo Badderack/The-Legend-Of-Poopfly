@@ -3,6 +3,7 @@ import time
 import skatter
 import text_utils
 from karaktär import karaktar
+from monster import monster
 
 print('''
                                 _____ _
@@ -61,29 +62,7 @@ text_utils.text_utils.slow(f'Nu söker du poopfly!\n')
 
 #Alla våra monster:
 
-class monster: #strukturen alla monster följer
-    def __init__(monster, genus, monstertyp, sty, kp):
-        monster.genus = genus
-        monster.monstertyp = monstertyp
-        monster.sty = sty
-        monster.kp = kp
 
-monsteralternativ = [ #möjliga fiender
-    monster('En vild', 'Guldfisk', random.random.random.randint(1, 3), 1),
-    monster('En vild', 'Goblin', 3 + random.random.random.randint(int(sp1.sty-3), int(sp1.sty +3)), 1),
-    monster('En vild', 'Häxa', 5 + random.random.random.randint(int(sp1.sty-4), int(sp1.sty +2)), 1),
-    monster('Ett vilt', 'Troll', 7 + random.random.random.randint(3, int(sp1.sty+8)), 1),
-    monster('En vild', 'Rikard', 2, 1),
-    monster('En galen', 'Blottare', 6 + random.random.random.randint(1, int(sp1.sty) + 5), 1),
-    monster('En kittel', 'fladdermöss', 3 + random.random.random.randint(2, int(sp1.sty)), 1)
-]
-
-bossmonsteralternativ = [ # möjliga bossar
-    monster('Den store och mäktiga fritidsledaren: ', 'Mojje', random.random.random.randint(10, 30), sp1.niva+1 * random.random.randint(30,50)),
-    monster('Den fruktansvärt (gulliga): ', 'Bleh', random.random.random.randint(5,15), sp1.niva+1 * random.random.randint(10,30)),
-    monster('"Jag skulle behöva en önskan just nu..."', 'Mortecai', random.random.random.randint(10,20), sp1.niva+1 * random.random.randint(20,40)),
-    monster('Den', 'den', 1, 1)
-]
 
 attackbeskrivning = [f'slår {sp1.namn}', f'sparkar {sp1.namn}', f'klöser {sp1.namn} med tånaglarna', f'biter {sp1.namn}', f'slickar {sp1.namn}', f'sticker {sp1.namn}', f'krossar {sp1.namn}',] #kul beskrivning för hur spelaren attackeras.
 
@@ -97,7 +76,7 @@ while True: #Hela spelloopen
     for i in range(len(sp1.inventarie)): #lägger till fällor baserat på hur många föremål spelaren har
         rumstyp.append('fällrum') 
     while len(rumstyp) > 3: #tar bort rum tills det bara är tre kvar
-        rumstyp.pop(random.random.randint(0, len(rumstyp)-1)) 
+        rumstyp.pop(random.randint(0, len(rumstyp)-1)) 
     random.shuffle(rumstyp) #slumpar ordningen på rummen
     dorrbeskrivningar = [] #tom lista för dörrbeskrivningar
     for i in rumstyp:
@@ -120,7 +99,7 @@ while True: #Hela spelloopen
                 dorrbeskrivningar.append(f'{sp1.namn} ser en gyllene dörr, men {sp1.namn + sp1.plural} teleskop låter dig se en fälla bakom...')
             else:
                 falldorr = ['mörk dörr med blodfläckar...', 'trädörr med en gyllene ram...', 'gyllene dörr med en träram...', 'asstor port med en dödskalle på...', 'dörr med ett välkomnande ljus bakom...'] #standardbeskrivningar för att fylla ut listan
-                dorrbeskrivningar.append(falldorr[random.random.randint(0, len(falldorr)-1)]) #om spelaren inte har teleskopet får de en slumpmässig beskrivning
+                dorrbeskrivningar.append(falldorr[random.randint(0, len(falldorr)-1)]) #om spelaren inte har teleskopet får de en slumpmässig beskrivning
         else:
             text_utils.text_utils.slow('något har gått riktigt fel här... slut på det roliga :/') #errormeddelande som inte bör dyka upp.
     text_utils.text_utils.slow(f'{sp1.namn} ser tre dörrar: \n en {dorrbeskrivningar[0]} \n en {dorrbeskrivningar[1]} \n och en {dorrbeskrivningar[2]}\n')
@@ -162,7 +141,7 @@ while True: #Hela spelloopen
 
     if rumstyp[int(val)-1] == 'monsterrum':
         sp1.ge_stats() #uppdaterar spelarens stats en funktion
-        fiende = monsteralternativ[random.random.randint(0, len(monsteralternativ)-1)] #Väljer en fiende till just detta rum
+        fiende = monster.generera_monster(sp1)
         random.text_utils.slow(f"{fiende.genus} {fiende.monstertyp} dyker upp!")
         time.sleep(1)
         random.text_utils.slow(f"Den har styrkan {fiende.sty}")
@@ -258,7 +237,7 @@ while True: #Hela spelloopen
 
     elif rumstyp[int(val)-1] == 'bossrum':
         sp1.ge_stats()
-        fiende = bossmonsteralternativ[random.randint(0, len(bossmonsteralternativ)-1)] #skapar en bossfiende från bossmonsteralternativ
+        fiende = monster.generera_boss(sp1)
         text_utils.slow(f'I ett bossrum kommer turer att utkämpas tills spelaren eller bossen är döda. Spelaren kommer bli slagen upp till bossens sty och spelaren slår upp till sin sty, mellan varje tur kan föremål användas.\n')
         time.sleep(2)
         text_utils.slow(f'Plötsligt dyker {fiende.genus} {fiende.monstertyp} upp och ger dig en fördärvande blick!\n')
