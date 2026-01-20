@@ -185,7 +185,7 @@ while True: #Hela spelloopen
         while True:
             val = input('Vill du plocka upp den? J/N -> ').upper()
             if val == 'J':
-                skatter.tilvinna_skatt(sp1, tillvunnet_foremal)
+                sp1.tilvinna_skatt(sp1, tillvunnet_foremal)
                 text_utils.slow(f'{sp1.namn} plockar upp {tillvunnet_foremal.namn}')
                 break
             elif val == 'N':
@@ -221,7 +221,7 @@ while True: #Hela spelloopen
             sp1.skada += 2
             text_utils.slow(f'Dvärgen drar sitt svärd och hugger {sp1.namn}\n\n{sp1.namn} har nu {sp1.kp - sp1.skada} KP kvar')
         elif val == 'S':
-            text_utils.slow(skatter.avskaffa_skatt(sp1))
+            text_utils.slow(sp1.avskaffa_skatt(sp1))
 
     #EN BOSS
 
@@ -308,7 +308,7 @@ while True: #Hela spelloopen
         while True:
             val = input('\n\nVill du plocka upp den? J/N ->').upper()
             if val == 'J':
-                skatter.tilvinna_skatt(sp1, tillvunnet_foremal)
+                sp1.tilvinna_skatt(sp1, tillvunnet_foremal)
                 break
             elif val == 'N':
                 break
