@@ -132,11 +132,11 @@ while True: #Hela spelloopen
     if rumstyp[int(val)-1] == 'monsterrum':
         sp1.ge_stats() #uppdaterar spelarens stats en funktion
         fiende = monster.generera_monster(sp1)
-        random.text_utils.slow(f"{fiende.genus} {fiende.monstertyp} dyker upp!")
+        text_utils.slow(f"{fiende.genus} {fiende.monstertyp} dyker upp!")
         time.sleep(1)
-        random.text_utils.slow(f"Den har styrkan {fiende.sty}")
+        text_utils.slow(f"Den har styrkan {fiende.sty}")
         time.sleep(1)
-        random.text_utils.slow(f"{sp1.namn}{sp1.plural} styrka är {sp1.sty}")
+        text_utils.slow(f"{sp1.namn}{sp1.plural} styrka är {sp1.sty}")
         time.sleep(1)
 
         while True: #stridssekvensen
