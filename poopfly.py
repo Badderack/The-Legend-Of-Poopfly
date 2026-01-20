@@ -267,14 +267,54 @@ def avskaffa_skatt(self): #Funktion för att ta bort/byta ut ett föremål i spe
             if int(val) in range(1, len(self.inventarie) + 1):
                 if input(f'Är du säker på att du vill byta ut {self.inventarie[int(val) - 1].namn}? J/N ->').upper() == 'J':
                     slow(f'{sp1.namn} släpper sin {self.inventarie[int(val) - 1].namn}')
+                    skatt_namn = {self.inventarie[int(val) - 1].namn}
                     self.inventarie.pop(int(val) - 1)
-                    return()
+                    return(skatt_namn)
         slow('Skriv siffran som representerar föremålet du vill byta ut (1, 2, 3, 4, 5, 6)')
 
 def tilvinna_skatt(self, skatt): #Funktion för att lägga till ett föremål i spelarens inventarie
     self.inventarie.append(skatt)
     if len(self.inventarie) > 5:
         avskaffa_skatt(self)
+
+def generera_skatt(ktvå, ktre, kfyra):
+    foremal_kvalitet = randint(1, 100)
+    while True:
+        if len(k1) + len(k2) + len(k3) + len(k4) > 0:
+            if foremal_kvalitet >= kfyra:
+                if len(k4) > 0:
+                    tillvunnet_foremal = k4[randint(0, len(k4) - 1)]
+                    k4.remove(tillvunnet_foremal)
+                    break
+                else:
+                    foremal_kvalitet = ktre
+                    continue
+            elif foremal_kvalitet >= ktre:
+                if len(k3) > 0:
+                    tillvunnet_foremal = k3[randint(0, len(k3) - 1)]
+                    k3.remove(tillvunnet_foremal)
+                    break
+                else:
+                    foremal_kvalitet = ktvå
+                    continue
+            elif foremal_kvalitet >= ktvå:
+                if len(k2) > 0:
+                    tillvunnet_foremal = k2[randint(0, len(k2) - 1)]
+                    k2.remove(tillvunnet_foremal)
+                    break
+                else:
+                    foremal_kvalitet = 1
+                    continue
+            elif len(k1) > 0:
+                tillvunnet_foremal = k1[randint(0, len(k1) - 1)]
+                k1.remove(tillvunnet_foremal)
+            else:
+                foremal_kvalitet = 100
+                continue
+        else:
+            tillvunnet_foremal = skatt('Poopfly', -100, -100, 10, '"Wow, den suger verkligen mer än vad jag trodde..."', 0)
+        break
+    return(tillvunnet_foremal)
 
 
 
@@ -283,17 +323,7 @@ sp1 = karaktar(f"{fnamn[randint(0, len(fnamn)-1)]}{enamn[randint(0, len(enamn)-1
 if sp1.namn[0] == 'g':
     sp1.namn = von_ormbarst_namn() #Speciell namn-generator för namn som börjar med g, för att få mer passande namn för Von Ormbarst
 
-foremal_kvalitet = randint(1, 100) #Bestämmer föremåls kvalitet för evighetsföremålet
-if foremal_kvalitet >= 96:
-    foremal_kvalitet = k4
-elif foremal_kvalitet >= 81:
-    foremal_kvalitet = k3
-elif foremal_kvalitet > 61:
-    foremal_kvalitet = k2
-else:
-    foremal_kvalitet = k1
-
-sp1.inventarie.append(foremal_kvalitet[randint(0, len(foremal_kvalitet)-1)]) #Föremålet läggs till i spelare 1s inventraie
+sp1.inventarie.append(generera_skatt(61, 81, 97)) #Genererar en skatt att börja med 60% chans för kvalitet 1, 20 för k2, 16% för k3 och 3% för k4 (starting item)
 print(sp1.namn)
 print('KP:', sp1.kp)
 print('STY', sp1.sty)
@@ -369,7 +399,11 @@ while True: #Hela spelloopen
         elif i == 'läkerum':
             dorrbeskrivningar.append('dörr med ett välkomnande ljus bakom...')
         elif i == 'fällrum':
-            if skatt('Teleskop', 0, 0, 0, '"Ökad sikt"', 0) in [sp1.inventarie]: # en skatt som låter spelaren se fällor
+            har_teleskop = False
+            for i in sp1.inventarie: 
+                if i.namn == "Teleskop": # en skatt som låter spelaren se fällor
+                    har_teleskop = True
+            if har_teleskop == True:
                 dorrbeskrivningar.append(f'{sp1.namn} ser en gyllene dörr, men {sp1.namn + plural} teleskop låter dig se en fälla bakom...')
             else:
                 falldorr = ['mörk dörr med blodfläckar...', 'trädörr med en gyllene ram...', 'gyllene dörr med en träram...', 'asstor port med en dödskalle på...', 'dörr med ett välkomnande ljus bakom...'] #standardbeskrivningar för att fylla ut listan
@@ -443,63 +477,31 @@ while True: #Hela spelloopen
                     continue
 
         if sp1.sty > fiende.sty: #kollar om spelaren vinner
-            slow(f'{sp1.namn} besegrade {fiende.monstertyp} och gick upp en nivå! \n')
+            slow(f'{sp1.namn} besegrade {fiende.monstertyp} och gick upp en nivå! \n\n{sp1.namn} är nu nivå {sp1.niva + 1}')
             sp1.bas_niva += 1 #sp1 går upp en nivå
         elif sp1.sty == fiende.sty: #om selaren varken vinner eller förlorar
-            slow(f'Det var en svår strid, utan segrare. {sp1.namn} tar ingen skada men går inte upp en nivå. \n')
+            slow(f'Det var en svår strid, utan segrare. {sp1.namn} tar ingen skada men går inte upp en nivå. \n\n{sp1.namn} är nu nivå {sp1.niva}')
         else: #om spelaren förlorar
             slag = randint(1, fiende.sty) #sp1 tar skada
-            slow(f'{sp1.namn} blev besegrad av {fiende.monstertyp} och förlorade {slag} kp. \n')
+            slow(f'{sp1.namn} blev besegrad av {fiende.monstertyp} och förlorade {slag} kp. \n\n{sp1.namn} är nu nivå {sp1.niva + 1}')
             sp1.skada += slag
         
-        time.sleep(1)
-        slow(f"{sp1.namn} har {sp1.kp - sp1.skada} kp kvar.\n\n{sp1.namn} är nivå {sp1.niva +1}.")
+        slow(f"{sp1.namn} har {sp1.kp - sp1.skada} kp kvar.")
         time.sleep(1)
 
     #SKATTKAMMARE, rum att få skatter i
 
     elif rumstyp[int(val)-1] == 'rum med skatter': 
-        foremal_kvalitet = randint(1, 100)
-        while True:
-            if foremal_kvalitet >= 96:
-                if len(k4) > 0:
-                    tillvunnet_foremal = k4[randint(0, len(k4) - 1)]
-                    k4.remove(tillvunnet_foremal)
-                    break
-                else:
-                    foremal_kvalitet = 81
-                    continue
-            elif foremal_kvalitet >= 81:
-                if len(k3) > 0:
-                    tillvunnet_foremal = k3[randint(0, len(k3) - 1)]
-                    k3.remove(tillvunnet_foremal)
-                    break
-                else:
-                    foremal_kvalitet = 61
-                    continue
-            elif foremal_kvalitet > 61:
-                if len(k2) > 0:
-                    tillvunnet_foremal = k2[randint(0, len(k2) - 1)]
-                    k2.remove(tillvunnet_foremal)
-                    break
-                else:
-                    foremal_kvalitet = 1
-                    continue
-            elif len(k1) > 0:
-                tillvunnet_foremal = k1[randint(0, len(k1) - 1)]
-                k1.remove(tillvunnet_foremal)
-            else:
-                tillvunnet_foremal = skatt('Poopfly', -100, -100, 10, '"Wow, den suger verkligen mer än vad jag trodde..."', 0)
-            break
+        tillvunnet_foremal = generera_skatt(61, 81, 96)
         mod = 'mod'
-        if skatt.mod_ar_mult == True:
+        if tillvunnet_foremal.mod_ar_mult == True:
             mod = 'mult'
         slow('I skattkammaren finns det:\n')
         time.sleep(1)
         print(f'  {print_skatt(tillvunnet_foremal)}')
         time.sleep(1)
         while True:
-            val = input('Vill du plocka upp den? J/N -> \n').upper()
+            val = input('Vill du plocka upp den? J/N -> ').upper()
             if val == 'J':
                 tilvinna_skatt(sp1, tillvunnet_foremal)
                 slow(f'{sp1.namn} plockar upp {tillvunnet_foremal.namn}')
@@ -517,7 +519,7 @@ while True: #Hela spelloopen
         time.sleep(1)
         slow(f'{sp1.namn} ser en dvärg i andra änden av rummet')
         time.sleep(1)
-        slow('"gadd eller kladd"\n\n')
+        slow('"gadd eller kladd"\n')
         time.sleep(1)
         for i in range(len(sp1.inventarie)):
             print(f'{i+1}.{print_skatt(sp1.inventarie[i - 1])}')
@@ -531,8 +533,13 @@ while True: #Hela spelloopen
                 continue 
         if val == 'K':
             sp1.skada += 2
+            slow(f'Dvärgen drar sitt svärd och hugger {sp1.namn}\n\n{sp1.namn} har nu {sp1.kp - sp1.skada} KP kvar')
+        elif len(sp1.inventarie) <= 0:
+            slow(f'{sp1.namn} har inga skatter, det får bli kladd')
+            sp1.skada += 2
+            slow(f'Dvärgen drar sitt svärd och hugger {sp1.namn}\n\n{sp1.namn} har nu {sp1.kp - sp1.skada} KP kvar')
         elif val == 'S':
-            avskaffa_skatt(sp1)
+            slow(avskaffa_skatt(sp1))
 
     #EN BOSS
 
@@ -617,7 +624,7 @@ while True: #Hela spelloopen
         time.sleep(1)
         slow(f'  {print_skatt(tillvunnet_foremal)}\n')
         while True:
-            val = input('\nVill du plocka upp den? J/N ->\n').upper()
+            val = input('\n\nVill du plocka upp den? J/N ->').upper()
             if val == 'J':
                 tilvinna_skatt(sp1, tillvunnet_foremal)
                 break
@@ -634,7 +641,7 @@ while True: #Hela spelloopen
         sp1.skada = sp1.skada - randint(1, sp1.kp//2) #spelaren läker mellan 1 och halva sin kp
         if sp1.skada <= 0:
             sp1.skada = 0
-        slow(f'{sp1.namn} helar {val - sp1.skada} KP\n{sp1.namn} är nu hel!\n\n')
+        slow(f'{sp1.namn} helar {val - sp1.skada} KP\n{sp1.namn} är nu hel!\n')
         time.sleep(1)
     
     # FÄLLA, spelaren tar skada
