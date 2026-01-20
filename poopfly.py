@@ -61,7 +61,7 @@ sp1.starttid = time.time() #startar en timer för spelet
 
 
 while True: #Hela spelloopen
-    sp1.ge_stats()
+    sp1.start_tur()
     rumstyp = ['monsterrum', 'monsterrum', 'monsterrum', 'monsterrum', 'monsterrum', 'monsterrum', 'rum med skatter', 'rum med skatter', 'skatterum', 'skatterum', 'bossrum', 'bossrum', 'läkerum', 'läkerum',] #lista med möjliga rumstyper. rumsantalen öker/sänker oddsen att stöta på vissa rum
     for i in range(len(sp1.inventarie)): #lägger till fällor baserat på hur många föremål spelaren har
         rumstyp.append('fällrum') 
@@ -130,7 +130,7 @@ while True: #Hela spelloopen
     # MONSTERRUM
 
     if rumstyp[int(val)-1] == 'monsterrum':
-        sp1.ge_stats() #uppdaterar spelarens stats en funktion
+        sp1.start_tur() #uppdaterar spelarens stats en funktion
         fiende = monster.generera_monster(sp1)
         text_utils.slow(f"{fiende.genus} {fiende.monstertyp} dyker upp!")
         time.sleep(1)
@@ -226,7 +226,7 @@ while True: #Hela spelloopen
     #EN BOSS
 
     elif rumstyp[int(val)-1] == 'bossrum':
-        sp1.ge_stats()
+        sp1.start_tur()
         fiende = monster.generera_boss(sp1)
         text_utils.slow(f'I ett bossrum kommer turer att utkämpas tills spelaren eller bossen är döda. Spelaren kommer bli slagen upp till bossens sty och spelaren slår upp till sin sty, mellan varje tur kan föremål användas.\n')
         time.sleep(2)
@@ -263,7 +263,7 @@ while True: #Hela spelloopen
             slag = random.randint(1, sp1.sty) #sp1s attack
             text_utils.slow(f'{sp1.namn} slår {fiende.monstertyp} och gör {slag} skada\n')
             fiende.kp -= slag #fienden tar skada
-            sp1.ge_stats() #kollar nivå, stats, sp1.kp och allt annat som behöver kollas varje gång det är möjligt
+            sp1.start_tur() #kollar nivå, stats, sp1.kp och allt annat som behöver kollas varje gång det är möjligt
 
 
         text_utils.slow(f'{sp1.namn} besegrade {fiende.monstertyp}!\n') #spelaren får skatt om bossen besegras
