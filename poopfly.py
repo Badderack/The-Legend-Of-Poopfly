@@ -1,18 +1,8 @@
-from random import randint
-from random import shuffle
+import random
 import time
-from skatter import skatt
-from skatter import print_skatt
-from skatter import k1, k2, k3, k4
-from ormbarst_name_gen import von_ormbarst_namn
-from collections import Counter
-
-def slow(text, delay=0.03): #tar input i text och sekunder delay
-    for char in text:
-        print (char, end='', flush=True) #skriver ut et
-        time.sleep(delay) #väntar delay sekunder innan nästa tecken
-    print()
-
+import skatter
+import text_utils
+from karaktär import karaktar
 
 print('''
                                 _____ _
@@ -43,308 +33,31 @@ print('''
 
 input('Träd in i fängelshålan och ta med dig Poopfly:n på [RETUR]resan')
 
-fnamn = ['Isak', 'Pelle', 'Ludvig', 'Anton', 'Lizi', 'Edmund', 'Bertholowmew', 'gon', 'gon', 'gon', 'Filip', 'Holger', 'Oskar'] 
-enamn = [', den fördärvade', ' Bajs', ' McMillen', ' Döden', ' Nilsson', ' Rosencrantz', ' O´ Moriah', ' Kall', ' Von Ormbarst', ', den trosfanatiska', ', den skurna', ', den oupplysta', ', den enigmatiska', ', den godtyckliga', '']
-
-class karaktar: #Strukturen för spelarkaraktären
-    bas_kp = randint(5, 10) #Basvärde för karaktärens KP
-    bas_sty = randint(25, 50)//bas_kp #Basvärde för karaktärens STY, delat på bas_kp för att balansera
-    bas_niva = 0
-    kpmod = 0
-    stymod = 0
-    nivamod = 0
-    skada = 0
-    inventarie = []
-    def __init__(self, namn, kp, sty, niva):
-        self.namn = namn
-        self.kp = kp
-        self.sty = sty
-        self.niva = niva
-
-    def ge_stats(self):
-        self.kpmod = 0
-        self.stymod = 0
-        self.nivamod = 0
-        stymult = 1
-        kpmult = 1
-        for i in range(len(self.inventarie)): #applicerar föremålens modifikationer på karaktären, förändringarna kommer från filen skatter.py
-            if self.inventarie[i].mod_ar_mult == True:
-                stymult += self.inventarie[i].stymod
-                kpmult += self.inventarie[i].kpmod
-            else:
-                self.kpmod += self.inventarie[i].kpmod
-                self.stymod += self.inventarie[i].stymod
-                self.nivamod += self.inventarie[i].nivamod
-        
-        self.niva = self.bas_niva + self.nivamod #spelarens totala nivå
-        if self.bas_kp + self.kpmod * kpmult < 1:
-                self.kp = 1
-        else:
-            self.kp = (self.bas_kp + self.kpmod) * kpmult + (self.niva * 2)
-        self.sty = (self.bas_sty + self.stymod) * stymult + (self.niva * 2)
-        
-    
-        if self.niva >= 10: #En check som kollar om spelaren vunnit eller förlorat varje gång det är möjligt.
-            sluttid = time.time() #stoppar timern
-
-            #Vinnst men har slut på kp samtidigt
-
-            if self.kp - self.skada < 1:
-                slow(f'{sp1.namn} springer ifrån det fasansfulla monstret men det kommer ikapp. {sp1.namn} ser en dörr på glänt i slutet av korridoren... en blå dörr...')
-                time.sleep(1)
-                slow(f'{sp1.namn} ser en pedistal innanför dörren, med något ovanpå...')
-                time.sleep(1)
-                slow(f'...kan det vara poopfly?')
-                time.sleep(1)
-                slow(f'{sp1.namn} hinner presis in i rummet och smäller igen dörren bakom sig... {sp1.namn} plockar upp poopfly och känner en stor glädje i sin själ...')
-                time.sleep(1)
-                slow('PANG', 1)
-                slow(f'Monstret bakom {sp1.namn} fann en revolver någon måste ha tappat och sköt dig i ryggen igeonm dörren...')
-                time.sleep(2)
-                slow(f'Grattis! Du har vunnit spelet!... men till vilket pris? \n Det tog dig {int(sluttid - starttid)} sekunder')
-                while True: #Liten meny där man kan kolla sina stats och föremål innan man stänger ner spelet
-                    val = input('Tryck [F] för att kolla dina stats innan du dog, [R] för att kolla rygsäcken eller Tryck [D] för att avsluta spelet').upper()
-                    if val == 'R': #printar inventroty
-                        if len(sp1.inventarie) < 1:
-                            print('Du har inga föremål')
-                        for i in range(len(sp1.inventarie)):
-                            print(f'{i+1}.{print_skatt(sp1.inventarie[i - 1])}\n')
-
-                    elif val == 'D': #avslutar spelet
-                        quit('Vinnst??')
-
-                    elif val == 'F': #printar spelarens färdigheter
-                        print(f'{sp1.namn + plural} färdigheter:\n  Nivå: {sp1.niva} | KP: {sp1.kp} / {sp1.kp + sp1.skada} | STY: {sp1.sty}\n')
-                    
-                    quit()
-
-            #Vinnst!
-
-            slow(f'{sp1.namn} finner dig framför en blå dörr')
-            time.sleep(1)
-            slow(f'{sp1.namn} har inget annat val än att gå in i dörren')
-            time.sleep(1)
-            slow(f'Kan detta vara det {sp1.namn} har letat efter hela tiden?   \nKan det vara poopfly?\n')
-            time.sleep(1)
-            slow(f'{sp1.namn} öppnar dörren och ser en pedestal...')
-            time.sleep(1)
-            slow(f'{sp1.namn + plural} haka ramlar ner i marken\n')
-            slow('Herregud \n', 0.5)
-            slow('är det där...?\n')
-            slow('poopfly!?!?!?\n\n')
-            
-            time.sleep(2)
-            while True: #Liten meny där man kan kolla sina stats och föremål innan man stänger ner spelet
-                slow(f'Grattis! Du har vunnit spelet!\n Det tog dig {int(sluttid - starttid)} sekunder')
-                val = input('Tryck [F] för att kolla dina stats, [R] för att kolla rygsäcken eller Tryck [D] för att avsluta spelet').upper()
-                if val == 'R': #printar inventroty
-                    if len(sp1.inventarie) < 1:
-                        print('Du har inga föremål')
-                    for i in range(len(sp1.inventarie)):
-                        print(f'{i+1}.{print_skatt(sp1.inventarie[i - 1])}\n')
-
-                elif val == 'D': #avslutar spelet
-                    quit('Vinnst!!!!!!')
-
-                elif val == 'F': #printar spelarens färdigheter
-                    print(f'{sp1.namn + plural} färdigheter:\n  Nivå: {sp1.niva} | KP: {sp1.kp} / {sp1.kp + sp1.skada} | STY: {sp1.sty}\n')
-    
-        #Förlust
-
-        elif self.kp - self.skada < 1: #Om man dör printas detta
-            sluttid = time.time() #stoppar timern
-            slow(f'Du har FÖRLORAT SPELET! \n Det tog dig {int(sluttid - starttid)} sekunder')
-            while True: #Liten meny där man kan kolla sina stats och föremål innan man stänger ner spelet
-                val = input('Tryck [F] för att kolla dina stats presis innan du dog, [R] för att kolla rygsäcken eller Tryck [D] för att avsluta spelet').upper()
-                if val == 'R': #printar inventroty
-                    if len(sp1.inventarie) < 1:
-                        print('Du har inga föremål')
-                    for i in range(len(sp1.inventarie)):
-                        print(f'{i+1}.{print_skatt(sp1.inventarie[i - 1])}\n')
-
-                elif val == 'D': #avslutar spelet
-                    quit('Förlust')
-
-                elif val == 'F': #printar spelarens färdigheter
-                    print(f'{sp1.namn + plural} färdigheter:\n  Nivå: {sp1.niva} | KP: {sp1.kp} / {sp1.kp + sp1.skada} | STY: {sp1.sty}\n')
-
-        synergi_array = [] #Används för att kolla synergieffekter mellan föremål i inventarien
-        for i in range(len(self.inventarie)):
-            if self.inventarie[i].synergi_id != 0: #Loop sparar synergi_id:et hos alla föremål i inventariet
-                synergi_array.append(self.inventarie[i].synergi_id)
-
-        a = dict(Counter(synergi_array)) #Gör om listan till ett lexicon för enklare datahantering
-        if a.get(1) == 2: #Synergi 1: ELDKASTARE
-            slow(f'{sp1.namn} använder pyttelite intution och inser att om man kombinerar tändaren och sprejdeon kan hen göra en eldkastare, den lär göra ont...\n')
-            for p in range(2):
-                for synergi_skatt in self.inventarie:
-                    if synergi_skatt.synergi_id == 1:
-                        self.inventarie.remove(synergi_skatt)
-            self.inventarie.append(skatt('Improviserad ELDKASTARE', -2, 5, 0, '"BOCKEN BRINNER!!!"', 0))
-            self.inventarie[-1].kvalitet = 'SYNERGI'
-            print(print_skatt(self.inventarie[-1]))
-        
-        if a.get(2) == 2: #Synergi 2: Släpp lös det oönskade
-            for p in range(2):
-                slow(f'{sp1.namn} blir nyfiken till vad som igentligen finns i asken hen hittade tidigare och kommer och tänka på nyckeln hen tidigare fann\n')
-                time.sleep(1)
-                slow(f'{sp1.namn} rotar fram nyckeln ur packningen och märker att den har samma mönster som asken och börjar föra nyckeln mot nyckelhålet...\n')
-                time.sleep(1)
-                slow('...det är fasansfullt...')
-                for synergi_skatt in self.inventarie:
-                    if synergi_skatt.synergi_id == 2:
-                        self.inventarie.remove(synergi_skatt)
-            self.inventarie.append(skatt('Det oönskade...', -100, 30, 4, '"...borde alldrig ha öppnat asken"', 0))
-            self.inventarie[-1].kvalitet = 'SYNERGI'
-            print(print_skatt(self.inventarie[-1]))
-
-        if a.get(3) == 3: #Synergi 3: Dev console
-            del a[3]
-            slow('Tja, detta är ett medelande direkt från spelutveklarna: Eftersom att du har fått tag på alla tre minivarianter av oss kommer du nu att få ett så kallat SYNERGIföremål\n')
-            time.sleep(1)
-            slow('Ett SYNERGIföremål är en uppgraderad variant av flera föremål man får av att ha alla föremål av samma SYNERGI id\n')
-            time.sleep(1)
-            slow('Helt enkelt förklarat kommer vi att försvinna ur din ryggsäck och bytas ut mot Develpoer Console, ett föremål som är eqvivallent med och på vissa sätt överskrider de föremålen du förlorar.\n')
-            time.sleep(1)
-            slow('På så sätt får du mer plats för andra föremål och kan sammla på dig ännu fler föremål\n')
-            time.sleep(1)
-            for p in range(3):
-                for synergi_skatt in self.inventarie:
-                    if synergi_skatt.synergi_id == 3:
-                        self.inventarie.remove(synergi_skatt)
-            if 3 not in a and len(a) != 0:
-                slow('Du verkar dessutom ha några föremål på dig som har SYNERGIvarianter: ')
-                for p in self.inventarie:
-                    if p.synergi_id != 0:
-                        print(f'{p.namn}, ')
-            self.inventarie.append(skatt('Developer Console', 3, 15, 4, '"/level add 2"', 0))
-            self.inventarie[-1].kvalitet = 'SYNERGI'
-            print(print_skatt(self.inventarie[-1]))
-
-        if a.get(4) == 2: #Synergi 4: 
-            slow(f'Universumförstare och Helig utplånare börjar att lysa och låta från {sp1.namn + plural} väska')
-            time.sleep(1)
-            slow(f'{sp1.namn} plockar fram dem och ser på när de börjar slå sig samman')
-            time.sleep(1)
-            slow(f'{sp1.namn} blir bländad av ett starkt ljus och en blå dörr med ljusblå dörram frammanar sig framför {sp1.namn}...\n')
-            for p in range(2):
-                for synergi_skatt in self.inventarie:
-                    if synergi_skatt.synergi_id == 4:
-                        self.inventarie.remove(synergi_skatt)
-            self.inventarie.append(skatt('Poopfly', -100, -100, 10, '"Wow, den suger verkligen mer än vad jag trodde..."'), 0)
-            self.inventarie[-1].kvalitet = 0
-
-        if a.get(5) == 2:
-            slow(f'{sp1.namn} stöter på en mystisk man i fängelshålans gångar...')
-            time.sleep(1)
-            slow('"Jag heter Siv Olgor, men du kan kalla mig Revolvermannen"')
-            time.sleep(1)
-            slow('"Jag ser att du har hittat min ring och min gris, om du ger mig dem kan du få låna min revolver."')
-            time.sleep(1)
-            slow(f'Siv Olgor snarare rycker åt sig ringen från {sp1.namn + plural} hand och grisen (Lillen Spratt) från din sida och springer iväg, men som utlovat lämmnade han revolvern kvar på marken')
-            time.sleep(1)
-            slow(f'{sp1.namn} plockar upp den:\n')
-            for p in range(2):
-                for synergi_skatt in self.inventarie:
-                    if synergi_skatt.synergi_id == 5:
-                        self.inventarie.remove(synergi_skatt)
-            self.inventarie.append(skatt('Revolver', 0, 20, 0, '"Siv Olgors revolver"', 0))
-            self.inventarie[-1].kvlitet = 'SYNERGI'
-            print(print_skatt(self.inventarie[-1]))
-    time.sleep(1)
 
 
 
 
-def avskaffa_skatt(self): #Funktion för att ta bort/byta ut ett föremål i spelarens inventarie
-    output = ''
-    for i in range(0, len(self.inventarie)):
-        output += f'{i + 1}. {print_skatt(self.inventarie[i])}\n\n'
-    print(output)
-    while True:
-        val = input(f'Vilken skatt i din ryggsäck vill du byta ut??->')
-        if val.isdigit():
-            if int(val) in range(1, len(self.inventarie) + 1):
-                if input(f'Är du säker på att du vill byta ut {self.inventarie[int(val) - 1].namn}? J/N ->').upper() == 'J':
-                    slow(f'{sp1.namn} släpper sin {self.inventarie[int(val) - 1].namn}')
-                    skatt_namn = {self.inventarie[int(val) - 1].namn}
-                    self.inventarie.pop(int(val) - 1)
-                    return(skatt_namn)
-        slow('Skriv siffran som representerar föremålet du vill byta ut (1, 2, 3, 4, 5, 6)')
 
-def tilvinna_skatt(self, skatt): #Funktion för att lägga till ett föremål i spelarens inventarie
-    self.inventarie.append(skatt)
-    if len(self.inventarie) > 5:
-        avskaffa_skatt(self)
+sp1 = karaktar.skapa_karaktär()
 
-def generera_skatt(ktvå, ktre, kfyra):
-    foremal_kvalitet = randint(1, 100)
-    while True:
-        if len(k1) + len(k2) + len(k3) + len(k4) > 0:
-            if foremal_kvalitet >= kfyra:
-                if len(k4) > 0:
-                    tillvunnet_foremal = k4[randint(0, len(k4) - 1)]
-                    k4.remove(tillvunnet_foremal)
-                    break
-                else:
-                    foremal_kvalitet = ktre
-                    continue
-            elif foremal_kvalitet >= ktre:
-                if len(k3) > 0:
-                    tillvunnet_foremal = k3[randint(0, len(k3) - 1)]
-                    k3.remove(tillvunnet_foremal)
-                    break
-                else:
-                    foremal_kvalitet = ktvå
-                    continue
-            elif foremal_kvalitet >= ktvå:
-                if len(k2) > 0:
-                    tillvunnet_foremal = k2[randint(0, len(k2) - 1)]
-                    k2.remove(tillvunnet_foremal)
-                    break
-                else:
-                    foremal_kvalitet = 1
-                    continue
-            elif len(k1) > 0:
-                tillvunnet_foremal = k1[randint(0, len(k1) - 1)]
-                k1.remove(tillvunnet_foremal)
-            else:
-                foremal_kvalitet = 100
-                continue
-        else:
-            tillvunnet_foremal = skatt('Poopfly', -100, -100, 10, '"Wow, den suger verkligen mer än vad jag trodde..."', 0)
-        break
-    return(tillvunnet_foremal)
-
-
-
-
-sp1 = karaktar(f"{fnamn[randint(0, len(fnamn)-1)]}{enamn[randint(0, len(enamn)-1)]}", karaktar.bas_kp, karaktar.bas_sty, karaktar.bas_niva)#Skapar rollpersonen utifrån klassen karaktar. Skapar namn från listorna fnamn och enamn.
-if sp1.namn[0] == 'g':
-    sp1.namn = von_ormbarst_namn() #Speciell namn-generator för namn som börjar med g, för att få mer passande namn för Von Ormbarst
-
-sp1.inventarie.append(generera_skatt(61, 81, 97)) #Genererar en skatt att börja med 60% chans för kvalitet 1, 20 för k2, 16% för k3 och 3% för k4 (starting item)
 print(sp1.namn)
 print('KP:', sp1.kp)
 print('STY', sp1.sty)
 print(f'Startföremål: {sp1.inventarie[0].namn} | Kvalitet: {sp1.inventarie[0].kvalitet}\n{sp1.inventarie[0].beskrivning}\n')
 
-if sp1.namn[-1] == 's': # Kollar om spelarens namn slutar på s, och följer gramatikregler för plural
-    plural = ""
-else:
-    plural = "s"
+
 
 #RESTEN AV INTROT
 
-slow(f'{sp1.namn} träder in genom portarna...\n')
+text_utils.text_utils.slow(f'{sp1.namn} träder in genom portarna...\n')
 time.sleep(1)
-slow(f'Stendörrarna gnisslar mot golvet när de stängs bakom {sp1.namn}...\n')
+text_utils.text_utils.slow(f'Stendörrarna gnisslar mot golvet när de stängs bakom {sp1.namn}...\n')
 time.sleep(1)
-slow(f'{sp1.namn} tar ett djupt andetag och ser sig omkring...\n')
+text_utils.text_utils.slow(f'{sp1.namn} tar ett djupt andetag och ser sig omkring...\n')
 time.sleep(1)
-slow(f'{sp1.namn} står i ett stort stenrum med tre dörrar...\n')
+text_utils.text_utils.slow(f'{sp1.namn} står i ett stort stenrum med tre dörrar...\n')
 time.sleep(1)
-slow(f'Nu söker du poopfly!\n')
+text_utils.text_utils.slow(f'Nu söker du poopfly!\n')
 
 #Alla våra monster:
 
@@ -356,26 +69,26 @@ class monster: #strukturen alla monster följer
         monster.kp = kp
 
 monsteralternativ = [ #möjliga fiender
-    monster('En vild', 'Guldfisk', randint(1, 3), 1),
-    monster('En vild', 'Goblin', 3 + randint(int(sp1.sty-3), int(sp1.sty +3)), 1),
-    monster('En vild', 'Häxa', 5 + randint(int(sp1.sty-4), int(sp1.sty +2)), 1),
-    monster('Ett vilt', 'Troll', 7 + randint(3, int(sp1.sty+8)), 1),
+    monster('En vild', 'Guldfisk', random.random.random.randint(1, 3), 1),
+    monster('En vild', 'Goblin', 3 + random.random.random.randint(int(sp1.sty-3), int(sp1.sty +3)), 1),
+    monster('En vild', 'Häxa', 5 + random.random.random.randint(int(sp1.sty-4), int(sp1.sty +2)), 1),
+    monster('Ett vilt', 'Troll', 7 + random.random.random.randint(3, int(sp1.sty+8)), 1),
     monster('En vild', 'Rikard', 2, 1),
-    monster('En galen', 'Blottare', 6 + randint(1, int(sp1.sty) + 5), 1),
-    monster('En kittel', 'fladdermöss', 3 + randint(2, int(sp1.sty)), 1)
+    monster('En galen', 'Blottare', 6 + random.random.random.randint(1, int(sp1.sty) + 5), 1),
+    monster('En kittel', 'fladdermöss', 3 + random.random.random.randint(2, int(sp1.sty)), 1)
 ]
 
 bossmonsteralternativ = [ # möjliga bossar
-    monster('Den store och mäktiga fritidsledaren: ', 'Mojje', randint(10, 30), sp1.niva+1 * randint(30,50)),
-    monster('Den fruktansvärt (gulliga): ', 'Bleh', randint(5,15), sp1.niva+1 * randint(10,30)),
-    monster('"Jag skulle behöva en önskan just nu..."', 'Mortecai', randint(10,20), sp1.niva+1 * randint(20,40)),
+    monster('Den store och mäktiga fritidsledaren: ', 'Mojje', random.random.random.randint(10, 30), sp1.niva+1 * random.random.randint(30,50)),
+    monster('Den fruktansvärt (gulliga): ', 'Bleh', random.random.random.randint(5,15), sp1.niva+1 * random.random.randint(10,30)),
+    monster('"Jag skulle behöva en önskan just nu..."', 'Mortecai', random.random.random.randint(10,20), sp1.niva+1 * random.random.randint(20,40)),
     monster('Den', 'den', 1, 1)
 ]
 
 attackbeskrivning = [f'slår {sp1.namn}', f'sparkar {sp1.namn}', f'klöser {sp1.namn} med tånaglarna', f'biter {sp1.namn}', f'slickar {sp1.namn}', f'sticker {sp1.namn}', f'krossar {sp1.namn}',] #kul beskrivning för hur spelaren attackeras.
 
 
-starttid = time.time() #startar en timer för spelet
+sp1.starttid = time.time() #startar en timer för spelet
 
 
 while True: #Hela spelloopen
@@ -384,8 +97,8 @@ while True: #Hela spelloopen
     for i in range(len(sp1.inventarie)): #lägger till fällor baserat på hur många föremål spelaren har
         rumstyp.append('fällrum') 
     while len(rumstyp) > 3: #tar bort rum tills det bara är tre kvar
-        rumstyp.pop(randint(0, len(rumstyp)-1)) 
-    shuffle(rumstyp) #slumpar ordningen på rummen
+        rumstyp.pop(random.random.randint(0, len(rumstyp)-1)) 
+    random.shuffle(rumstyp) #slumpar ordningen på rummen
     dorrbeskrivningar = [] #tom lista för dörrbeskrivningar
     for i in rumstyp:
         if i == 'monsterrum':
@@ -404,13 +117,13 @@ while True: #Hela spelloopen
                 if i.namn == "Teleskop": # en skatt som låter spelaren se fällor
                     har_teleskop = True
             if har_teleskop == True:
-                dorrbeskrivningar.append(f'{sp1.namn} ser en gyllene dörr, men {sp1.namn + plural} teleskop låter dig se en fälla bakom...')
+                dorrbeskrivningar.append(f'{sp1.namn} ser en gyllene dörr, men {sp1.namn + sp1.plural} teleskop låter dig se en fälla bakom...')
             else:
                 falldorr = ['mörk dörr med blodfläckar...', 'trädörr med en gyllene ram...', 'gyllene dörr med en träram...', 'asstor port med en dödskalle på...', 'dörr med ett välkomnande ljus bakom...'] #standardbeskrivningar för att fylla ut listan
-                dorrbeskrivningar.append(falldorr[randint(0, len(falldorr)-1)]) #om spelaren inte har teleskopet får de en slumpmässig beskrivning
+                dorrbeskrivningar.append(falldorr[random.random.randint(0, len(falldorr)-1)]) #om spelaren inte har teleskopet får de en slumpmässig beskrivning
         else:
-            slow('något har gått riktigt fel här... slut på det roliga :/') #errormeddelande som inte bör dyka upp.
-    slow(f'{sp1.namn} ser tre dörrar: \n en {dorrbeskrivningar[0]} \n en {dorrbeskrivningar[1]} \n och en {dorrbeskrivningar[2]}\n')
+            text_utils.text_utils.slow('något har gått riktigt fel här... slut på det roliga :/') #errormeddelande som inte bör dyka upp.
+    text_utils.text_utils.slow(f'{sp1.namn} ser tre dörrar: \n en {dorrbeskrivningar[0]} \n en {dorrbeskrivningar[1]} \n och en {dorrbeskrivningar[2]}\n')
 
     while True: #meny innan strid
         val = input('''Vad vill du göra?
@@ -423,22 +136,22 @@ while True: #Hela spelloopen
             if len(sp1.inventarie) < 1:
                 print('Du har inga föremål')
             for i in range(len(sp1.inventarie)):
-                print(f'{i+1}.{print_skatt(sp1.inventarie[i - 1])}\n')
+                print(f'{i+1}.{skatter.print_skatt(sp1.inventarie[i - 1])}\n')
         elif val == 'D':
             while True:
                 val = input(f'Vilken dörr vill du öppna? \n [1] {dorrbeskrivningar[0]} \n [2] {dorrbeskrivningar[1]} \n [3] {dorrbeskrivningar[2]} \n [4] Avbryt \n ->')
                 if val in ['1', '2', '3', '4']:
                     break
                 else:
-                    slow('Ogiltigt val: välj igen') #om spelaren inte väljer ett giltigt val.
+                    text_utils.text_utils.slow('Ogiltigt val: välj igen') #om spelaren inte väljer ett giltigt val.
                     continue
             if val in ['1', '2', '3']: #om spelaren väljer att öppna en dörr
-                slow(f'{sp1.namn} kliver in i ett {rumstyp[int(val)-1]}\n') #rumstypen avsjöjas för spelaren
+                text_utils.text_utils.slow(f'{sp1.namn} kliver in i ett {rumstyp[int(val)-1]}\n') #rumstypen avsjöjas för spelaren
                 time.sleep(1)
                 break
 
         elif val == 'F': #printar spelarens färdigheter
-            print(f'{sp1.namn + plural} färdigheter:\n  Nivå: {sp1.niva} | KP: {sp1.kp} / {sp1.kp + sp1.skada} | STY: {sp1.sty}\n')
+            print(f'{sp1.namn + sp1.plural} färdigheter:\n  Nivå: {sp1.niva} | KP: {sp1.kp} / {sp1.kp + sp1.skada} | STY: {sp1.sty}\n')
 
         else:
             continue
@@ -449,12 +162,12 @@ while True: #Hela spelloopen
 
     if rumstyp[int(val)-1] == 'monsterrum':
         sp1.ge_stats() #uppdaterar spelarens stats en funktion
-        fiende = monsteralternativ[randint(0, len(monsteralternativ)-1)] #Väljer en fiende till just detta rum
-        slow(f"{fiende.genus} {fiende.monstertyp} dyker upp!")
+        fiende = monsteralternativ[random.random.randint(0, len(monsteralternativ)-1)] #Väljer en fiende till just detta rum
+        random.text_utils.slow(f"{fiende.genus} {fiende.monstertyp} dyker upp!")
         time.sleep(1)
-        slow(f"Den har styrkan {fiende.sty}")
+        random.text_utils.slow(f"Den har styrkan {fiende.sty}")
         time.sleep(1)
-        slow(f"{sp1.namn}{plural} styrka är {sp1.sty}")
+        random.text_utils.slow(f"{sp1.namn}{sp1.plural} styrka är {sp1.sty}")
         time.sleep(1)
 
         while True: #stridssekvensen
@@ -467,93 +180,93 @@ while True: #Hela spelloopen
                     if len(sp1.inventarie) < 1:
                         print('Du har inga föremål')
                     for i in range(len(sp1.inventarie)):
-                        print(f'{i+1}.{print_skatt(sp1.inventarie[i - 1])}\n')
+                        print(f'{i+1}.{skatter.print_skatt(sp1.inventarie[i - 1])}\n')
                     print()
                 elif val == 'M':
                     break
                 elif val == 'F':
-                    print(f'{sp1.namn + plural} färdigheter:\n  Nivå: {sp1.niva} | KP: {sp1.kp} / {sp1.kp + sp1.skada} | STY: {sp1.sty}\n')
+                    print(f'{sp1.namn + sp1.plural} färdigheter:\n  Nivå: {sp1.niva} | KP: {sp1.kp} / {sp1.kp + sp1.skada} | STY: {sp1.sty}\n')
                 else:
                     continue
 
         if sp1.sty > fiende.sty: #kollar om spelaren vinner
-            slow(f'{sp1.namn} besegrade {fiende.monstertyp} och gick upp en nivå! \n\n{sp1.namn} är nu nivå {sp1.niva + 1}')
+            text_utils.slow(f'{sp1.namn} besegrade {fiende.monstertyp} och gick upp en nivå! \n\n{sp1.namn} är nu nivå {sp1.niva + 1}')
             sp1.bas_niva += 1 #sp1 går upp en nivå
         elif sp1.sty == fiende.sty: #om selaren varken vinner eller förlorar
-            slow(f'Det var en svår strid, utan segrare. {sp1.namn} tar ingen skada men går inte upp en nivå. \n\n{sp1.namn} är nu nivå {sp1.niva}')
+            text_utils.slow(f'Det var en svår strid, utan segrare. {sp1.namn} tar ingen skada men går inte upp en nivå. \n\n{sp1.namn} är nu nivå {sp1.niva}')
         else: #om spelaren förlorar
-            slag = randint(1, fiende.sty) #sp1 tar skada
-            slow(f'{sp1.namn} blev besegrad av {fiende.monstertyp} och förlorade {slag} kp. \n\n{sp1.namn} är nu nivå {sp1.niva + 1}')
+            slag = random.randint(1, fiende.sty) #sp1 tar skada
+            text_utils.slow(f'{sp1.namn} blev besegrad av {fiende.monstertyp} och förlorade {slag} kp. \n\n{sp1.namn} är nu nivå {sp1.niva + 1}')
             sp1.skada += slag
         
-        slow(f"{sp1.namn} har {sp1.kp - sp1.skada} kp kvar.")
+        text_utils.slow(f"{sp1.namn} har {sp1.kp - sp1.skada} kp kvar.")
         time.sleep(1)
 
     #SKATTKAMMARE, rum att få skatter i
 
     elif rumstyp[int(val)-1] == 'rum med skatter': 
-        tillvunnet_foremal = generera_skatt(61, 81, 96)
+        tillvunnet_foremal = skatter.generera_skatt(61, 81, 96)
         mod = 'mod'
         if tillvunnet_foremal.mod_ar_mult == True:
             mod = 'mult'
-        slow('I skattkammaren finns det:\n')
+        text_utils.slow('I skattkammaren finns det:\n')
         time.sleep(1)
-        print(f'  {print_skatt(tillvunnet_foremal)}')
+        print(f'  {skatter.print_skatt(tillvunnet_foremal)}')
         time.sleep(1)
         while True:
             val = input('Vill du plocka upp den? J/N -> ').upper()
             if val == 'J':
-                tilvinna_skatt(sp1, tillvunnet_foremal)
-                slow(f'{sp1.namn} plockar upp {tillvunnet_foremal.namn}')
+                skatter.tilvinna_skatt(sp1, tillvunnet_foremal)
+                text_utils.slow(f'{sp1.namn} plockar upp {tillvunnet_foremal.namn}')
                 break
             elif val == 'N':
-                slow(f'{sp1.namn} lämmnar {tillvunnet_foremal.namn} bakom sig.')
+                text_utils.slow(f'{sp1.namn} lämmnar {tillvunnet_foremal.namn} bakom sig.')
                 break
             else:
-                slow('Skriv in [J]a eller [N]ej\n')
+                text_utils.slow('Skriv in [J]a eller [N]ej\n')
 
     # SKATTERUM, rum att betala skatt i
 
     elif rumstyp[int(val)-1] == 'skatterum':
-        slow(f'{sp1.namn} kliver in i en mörk beskattningskammare')
+        text_utils.slow(f'{sp1.namn} kliver in i en mörk beskattningskammare')
         time.sleep(1)
-        slow(f'{sp1.namn} ser en dvärg i andra änden av rummet')
+        text_utils.slow(f'{sp1.namn} ser en dvärg i andra änden av rummet')
         time.sleep(1)
-        slow('"gadd eller kladd"\n')
+        text_utils.slow('"gadd eller kladd"\n')
         time.sleep(1)
         for i in range(len(sp1.inventarie)):
-            print(f'{i+1}.{print_skatt(sp1.inventarie[i - 1])}')
+            print(f'{i+1}.{skatter.print_skatt(sp1.inventarie[i - 1])}')
         print()
         while True:
             val = input('Vad vill du betala i skatt? 1 [S]katt eller 2 [K]P ->').upper()
             if val == 'S' or val == 'K':
                 break
             else:
-                slow('Du MÅSTE skriva S eller K\n')
+                text_utils.slow('Du MÅSTE skriva S eller K\n')
                 continue 
         if val == 'K':
             sp1.skada += 2
-            slow(f'Dvärgen drar sitt svärd och hugger {sp1.namn}\n\n{sp1.namn} har nu {sp1.kp - sp1.skada} KP kvar')
+            text_utils.slow(f'Dvärgen drar sitt svärd och hugger {sp1.namn}\n\n{sp1.namn} har nu {sp1.kp - sp1.skada} KP kvar')
         elif len(sp1.inventarie) <= 0:
-            slow(f'{sp1.namn} har inga skatter, det får bli kladd')
+            text_utils.slow(f'{sp1.namn} har inga skatter, det får bli kladd')
             sp1.skada += 2
-            slow(f'Dvärgen drar sitt svärd och hugger {sp1.namn}\n\n{sp1.namn} har nu {sp1.kp - sp1.skada} KP kvar')
+            text_utils.slow(f'Dvärgen drar sitt svärd och hugger {sp1.namn}\n\n{sp1.namn} har nu {sp1.kp - sp1.skada} KP kvar')
         elif val == 'S':
-            slow(avskaffa_skatt(sp1))
+            text_utils.slow(skatter.avskaffa_skatt(sp1))
 
     #EN BOSS
 
     elif rumstyp[int(val)-1] == 'bossrum':
         sp1.ge_stats()
-        fiende = bossmonsteralternativ[randint(0, len(bossmonsteralternativ)-1)] #skapar en bossfiende från bossmonsteralternativ
-        slow(f'I ett bossrum kommer turer att utkämpas tills spelaren eller bossen är döda. Spelaren kommer bli slagen upp till bossens sty och spelaren slår upp till sin sty, mellan varje tur kan föremål användas.\n')
+        fiende = bossmonsteralternativ[random.randint(0, len(bossmonsteralternativ)-1)] #skapar en bossfiende från bossmonsteralternativ
+        text_utils.slow(f'I ett bossrum kommer turer att utkämpas tills spelaren eller bossen är döda. Spelaren kommer bli slagen upp till bossens sty och spelaren slår upp till sin sty, mellan varje tur kan föremål användas.\n')
         time.sleep(2)
-        slow(f'Plötsligt dyker {fiende.genus} {fiende.monstertyp} upp och ger dig en fördärvande blick!\n')
+        text_utils.slow(f'Plötsligt dyker {fiende.genus} {fiende.monstertyp} upp och ger dig en fördärvande blick!\n')
         
         while fiende.kp > 0: #Du strider tills fienden eller du är död
-            slow(f'{fiende.monstertyp} gör upp till {fiende.sty} skada!!!\n')
+            text_utils.slow(f'{fiende.monstertyp} gör upp till {fiende.sty} skada!!!\n')
             time.sleep(1)
-            slow(f'{fiende.monstertyp} har {fiende.kp} kp\n')
+            text_utils.slow(f'{fiende.monstertyp} har {fiende.kp} kp\n')
             time.sleep(1)
             while True:
                 val = input(f'''Vad vill du göra?
@@ -565,91 +278,91 @@ while True: #Hela spelloopen
                     if len(sp1.inventarie) < 1:
                         print('Du har inga föremål')
                     for i in range(len(sp1.inventarie)):
-                        print(f'{i+1}.{print_skatt(sp1.inventarie[i - 1])}\n')
+                        print(f'{i+1}.{skatter.print_skatt(sp1.inventarie[i - 1])}\n')
                 elif val == 'B':
                     break
                 elif val == 'F':
-                    print(f'{sp1.namn + plural} färdigheter:\n  Nivå: {sp1.niva} | KP: {sp1.kp} / {sp1.kp + sp1.skada} | STY: {sp1.sty}\n')
+                    print(f'{sp1.namn + sp1.plural} färdigheter:\n  Nivå: {sp1.niva} | KP: {sp1.kp} / {sp1.kp + sp1.skada} | STY: {sp1.sty}\n')
                 else:
                     continue
 
 
-            slag = randint(1, fiende.sty) #fiendens attack
-            slow(f'{fiende.monstertyp} {attackbeskrivning[randint(0, len(attackbeskrivning)-1)]} och gör {slag} skada!\n') #beskriver attacken från slumplistan attackbeskrivning
+            slag = random.randint(1, fiende.sty) #fiendens attack
+            text_utils.slow(f'{fiende.monstertyp} {attackbeskrivning[random.randint(0, len(attackbeskrivning)-1)]} och gör {slag} skada!\n') #beskriver attacken från slumplistan attackbeskrivning
             sp1.skada += slag #spelaren tar slag skada
             time.sleep(1)
-            slag = randint(1, sp1.sty) #sp1s attack
-            slow(f'{sp1.namn} slår {fiende.monstertyp} och gör {slag} skada\n')
+            slag = random.randint(1, sp1.sty) #sp1s attack
+            text_utils.slow(f'{sp1.namn} slår {fiende.monstertyp} och gör {slag} skada\n')
             fiende.kp -= slag #fienden tar skada
             sp1.ge_stats() #kollar nivå, stats, sp1.kp och allt annat som behöver kollas varje gång det är möjligt
 
 
-        slow(f'{sp1.namn} besegrade {fiende.monstertyp}!\n') #spelaren får skatt om bossen besegras
-        foremal_kvalitet = randint(1,100) #vikt för sällsyntare skatter
+        text_utils.slow(f'{sp1.namn} besegrade {fiende.monstertyp}!\n') #spelaren får skatt om bossen besegras
+        foremal_kvalitet = random.randint(1,100) #vikt för sällsyntare skatter
         while True:
             if foremal_kvalitet >= 51:
-                if len(k4) > 0:
-                    tillvunnet_foremal = k4[randint(0, len(k4) - 1)]
-                    k4.remove(tillvunnet_foremal)
+                if len(skatter.k4) > 0:
+                    tillvunnet_foremal = skatter.k4[random.randint(0, len(skatter.k4) - 1)]
+                    skatter.k4.remove(tillvunnet_foremal)
                     break
                 else:
                     foremal_kvalitet = 1
                     continue
             elif foremal_kvalitet >= 1:
-                if len(k3) > 0:
-                    tillvunnet_foremal = k3[randint(0, len(k3) - 1)]
-                    k3.remove(tillvunnet_foremal)
+                if len(skatter.k3) > 0:
+                    tillvunnet_foremal = skatter.k3[random.randint(0, len(skatter.k3) - 1)]
+                    skatter.k3.remove(tillvunnet_foremal)
                     break
                 else:
                     foremal_kvalitet = 0
                     continue
             elif foremal_kvalitet > 0:
-                if len(k2) > 0:
-                    tillvunnet_foremal = k2[randint(0, len(k2) - 1)]
-                    k2.remove(tillvunnet_foremal)
+                if len(skatter.k2) > 0:
+                    tillvunnet_foremal = skatter.k2[random.randint(0, len(skatter.k2) - 1)]
+                    skatter.k2.remove(tillvunnet_foremal)
                     break
                 else:
                     foremal_kvalitet = 0
                     continue
-            elif len(k1) > 0:
-                tillvunnet_foremal = k1[randint(0, len(k1) - 1)]
-                k1.remove(tillvunnet_foremal)
+            elif len(skatter.k1) > 0:
+                tillvunnet_foremal = skatter.k1[random.randint(0, len(skatter.k1) - 1)]
+                skatter.k1.remove(tillvunnet_foremal)
             else:
-                tillvunnet_foremal = skatt('Poopfly', -100, -100, 10, '"Wow, den suger verkligen mer än vad jag trodde..."')
+                tillvunnet_foremal = skatter.skatt('Poopfly', -100, -100, 10, '"Wow, den suger verkligen mer än vad jag trodde..."')
             break
         mod = 'mod'
-        if skatt.mod_ar_mult == True:
+        if skatter.skatt.mod_ar_mult == True:
             mod = 'mult'
-        slow('I skattkammaren finns det:')
+        text_utils.slow('I skattkammaren finns det:')
         time.sleep(1)
-        slow(f'  {print_skatt(tillvunnet_foremal)}\n')
+        text_utils.slow(f'  {skatter.print_skatt(tillvunnet_foremal)}\n')
         while True:
             val = input('\n\nVill du plocka upp den? J/N ->').upper()
             if val == 'J':
-                tilvinna_skatt(sp1, tillvunnet_foremal)
+                skatter.tilvinna_skatt(sp1, tillvunnet_foremal)
                 break
             elif val == 'N':
                 break
             else:
-                slow('Skriv in [J]a eller [N]ej\n\n')
+                text_utils.slow('Skriv in [J]a eller [N]ej\n\n')
 
 
     # LÄKERUM, spelaren helas
 
     elif rumstyp[int(val)-1] == 'läkerum':
         val = sp1.skada
-        sp1.skada = sp1.skada - randint(1, sp1.kp//2) #spelaren läker mellan 1 och halva sin kp
+        sp1.skada = sp1.skada - random.randint(1, sp1.kp//2) #spelaren läker mellan 1 och halva sin kp
         if sp1.skada <= 0:
             sp1.skada = 0
-        slow(f'{sp1.namn} helar {val - sp1.skada} KP\n{sp1.namn} är nu hel!\n')
+        text_utils.slow(f'{sp1.namn} helar {val - sp1.skada} KP\n{sp1.namn} är nu hel!\n')
         time.sleep(1)
     
     # FÄLLA, spelaren tar skada
     
     elif rumstyp[int(val)-1] == 'fällrum':
-        fallskada = randint(0, sp1.kp//2) # Spelaren kan ta upp till halva sin kp i skada
+        fallskada = random.randint(0, sp1.kp//2) # Spelaren kan ta upp till halva sin kp i skada
         if fallskada == 0:
-            slow(f'OJ! {sp1.namn} klev in i en FÄLLA men undvek den, ingen skada tagen!\n\n')
+            text_utils.slow(f'OJ! {sp1.namn} klev in i en FÄLLA men undvek den, ingen skada tagen!\n\n')
         else:
-            slow(f'AJ! {sp1.namn} klev in i en FÄLLA och tog {fallskada} skada!\n\n')
+            text_utils.slow(f'AJ! {sp1.namn} klev in i en FÄLLA och tog {fallskada} skada!\n\n')
             sp1.skada += fallskada #spelaren tar skada

@@ -63,3 +63,44 @@ skatt('Lillens spratt', 1, 2, 0, '"Bam bam!"', 5)
 for i in k4:
     i.kvalitet = 4 #Ger alla items i listan k4 kvalitetvärde 4
     i.mod_ar_mult = True
+
+
+
+def generera_skatt(ktvå, ktre, kfyra):
+    foremal_kvalitet = randint(1, 100)
+    while True:
+        if len(k1) + len(k2) + len(k3) + len(k4) > 0:
+            if foremal_kvalitet >= kfyra:
+                if len(k4) > 0:
+                    tillvunnet_foremal = k4[randint(0, len(k4) - 1)]
+                    k4.remove(tillvunnet_foremal)
+                    break
+                else:
+                    foremal_kvalitet = ktre
+                    continue
+            elif foremal_kvalitet >= ktre:
+                if len(k3) > 0:
+                    tillvunnet_foremal = k3[randint(0, len(k3) - 1)]
+                    k3.remove(tillvunnet_foremal)
+                    break
+                else:
+                    foremal_kvalitet = ktvå
+                    continue
+            elif foremal_kvalitet >= ktvå:
+                if len(k2) > 0:
+                    tillvunnet_foremal = k2[randint(0, len(k2) - 1)]
+                    k2.remove(tillvunnet_foremal)
+                    break
+                else:
+                    foremal_kvalitet = 1
+                    continue
+            elif len(k1) > 0:
+                tillvunnet_foremal = k1[randint(0, len(k1) - 1)]
+                k1.remove(tillvunnet_foremal)
+            else:
+                foremal_kvalitet = 100
+                continue
+        else:
+            tillvunnet_foremal = skatt('Poopfly', -100, -100, 10, '"Wow, den suger verkligen mer än vad jag trodde..."', 0)
+        break
+    return(tillvunnet_foremal)
