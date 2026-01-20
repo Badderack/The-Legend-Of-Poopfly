@@ -43,15 +43,15 @@ print(f'Startföremål: {sp1.inventarie[0].namn} | Kvalitet: {sp1.inventarie[0].
 
 #RESTEN AV INTROT
 
-text_utils.text_utils.slow(f'{sp1.namn} träder in genom portarna...\n')
+text_utils.slow(f'{sp1.namn} träder in genom portarna...\n')
 time.sleep(1)
-text_utils.text_utils.slow(f'Stendörrarna gnisslar mot golvet när de stängs bakom {sp1.namn}...\n')
+text_utils.slow(f'Stendörrarna gnisslar mot golvet när de stängs bakom {sp1.namn}...\n')
 time.sleep(1)
-text_utils.text_utils.slow(f'{sp1.namn} tar ett djupt andetag och ser sig omkring...\n')
+text_utils.slow(f'{sp1.namn} tar ett djupt andetag och ser sig omkring...\n')
 time.sleep(1)
-text_utils.text_utils.slow(f'{sp1.namn} står i ett stort stenrum med tre dörrar...\n')
+text_utils.slow(f'{sp1.namn} står i ett stort stenrum med tre dörrar...\n')
 time.sleep(1)
-text_utils.text_utils.slow(f'Nu söker du poopfly!\n')
+text_utils.slow(f'Nu söker du poopfly!\n')
 
 #Alla våra monster:
 
@@ -91,8 +91,8 @@ while True: #Hela spelloopen
                 falldorr = ['mörk dörr med blodfläckar...', 'trädörr med en gyllene ram...', 'gyllene dörr med en träram...', 'asstor port med en dödskalle på...', 'dörr med ett välkomnande ljus bakom...'] #standardbeskrivningar för att fylla ut listan
                 dorrbeskrivningar.append(falldorr[random.randint(0, len(falldorr)-1)]) #om spelaren inte har teleskopet får de en slumpmässig beskrivning
         else:
-            text_utils.text_utils.slow('något har gått riktigt fel här... slut på det roliga :/') #errormeddelande som inte bör dyka upp.
-    text_utils.text_utils.slow(f'{sp1.namn} ser tre dörrar: \n en {dorrbeskrivningar[0]} \n en {dorrbeskrivningar[1]} \n och en {dorrbeskrivningar[2]}\n')
+            text_utils.slow('något har gått riktigt fel här... slut på det roliga :/') #errormeddelande som inte bör dyka upp.
+    text_utils.slow(f'{sp1.namn} ser tre dörrar: \n en {dorrbeskrivningar[0]} \n en {dorrbeskrivningar[1]} \n och en {dorrbeskrivningar[2]}\n')
 
     while True: #meny innan strid
         val = input('''Vad vill du göra?
@@ -112,10 +112,10 @@ while True: #Hela spelloopen
                 if val in ['1', '2', '3', '4']:
                     break
                 else:
-                    text_utils.text_utils.slow('Ogiltigt val: välj igen') #om spelaren inte väljer ett giltigt val.
+                    text_utils.slow('Ogiltigt val: välj igen') #om spelaren inte väljer ett giltigt val.
                     continue
             if val in ['1', '2', '3']: #om spelaren väljer att öppna en dörr
-                text_utils.text_utils.slow(f'{sp1.namn} kliver in i ett {rumstyp[int(val)-1]}\n') #rumstypen avsjöjas för spelaren
+                text_utils.slow(f'{sp1.namn} kliver in i ett {rumstyp[int(val)-1]}\n') #rumstypen avsjöjas för spelaren
                 time.sleep(1)
                 break
 
