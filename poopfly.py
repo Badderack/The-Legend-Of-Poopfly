@@ -34,19 +34,12 @@ print('''
 
 input('Träd in i fängelshålan och ta med dig Poopfly:n på [RETUR]resan')
 
-
-
-
-
-
 sp1 = karaktar.skapa_karaktär()
 
 print(sp1.namn)
 print('KP:', sp1.kp)
 print('STY', sp1.sty)
 print(f'Startföremål: {sp1.inventarie[0].namn} | Kvalitet: {sp1.inventarie[0].kvalitet}\n{sp1.inventarie[0].beskrivning}\n')
-
-
 
 #RESTEN AV INTROT
 
@@ -62,10 +55,7 @@ text_utils.text_utils.slow(f'Nu söker du poopfly!\n')
 
 #Alla våra monster:
 
-
-
 attackbeskrivning = [f'slår {sp1.namn}', f'sparkar {sp1.namn}', f'klöser {sp1.namn} med tånaglarna', f'biter {sp1.namn}', f'slickar {sp1.namn}', f'sticker {sp1.namn}', f'krossar {sp1.namn}',] #kul beskrivning för hur spelaren attackeras.
-
 
 sp1.starttid = time.time() #startar en timer för spelet
 
