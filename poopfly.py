@@ -93,47 +93,7 @@ while True: #Hela spelloopen
     # MONSTERRUM
 
     if valt_rum.rumstyp == 'monsterrum':
-        sp1.start_tur() #uppdaterar spelarens stats en funktion
-        fiende = monster.generera_monster(sp1)
-        text_utils.slow(f"{fiende.genus} {fiende.monstertyp} dyker upp!")
-        time.sleep(1)
-        text_utils.slow(f"Den har styrkan {fiende.sty}")
-        time.sleep(1)
-        text_utils.slow(f"{sp1.namn}{sp1.plural} styrka är {sp1.sty}")
-        time.sleep(1)
-
-        while True: #stridssekvensen
-                val = input(f'''Vad vill du göra?
-                                Kolla [R]yggsäcken
-                                Slå mot [M]onstret {fiende.monstertyp}
-                                Kolla [F]ärdigheter 
-                                -> ''').upper()
-                if val == 'R':
-                    if len(sp1.inventarie) < 1:
-                        print('Du har inga föremål')
-                    for i in range(len(sp1.inventarie)):
-                        print(f'{i+1}.{skatter.print_skatt(sp1.inventarie[i - 1])}\n')
-                    print()
-                elif val == 'M':
-                    break
-                elif val == 'F':
-                    print(f'{sp1.namn + sp1.plural} färdigheter:\n  Nivå: {sp1.niva} | KP: {sp1.kp} / {sp1.kp + sp1.skada} | STY: {sp1.sty}\n')
-                else:
-                    continue
-
-        if sp1.sty > fiende.sty: #kollar om spelaren vinner
-            text_utils.slow(f'{sp1.namn} besegrade {fiende.monstertyp} och gick upp en nivå! \n\n{sp1.namn} är nu nivå {sp1.niva + 1}')
-            sp1.bas_niva += 1 #sp1 går upp en nivå
-        elif sp1.sty == fiende.sty: #om selaren varken vinner eller förlorar
-            text_utils.slow(f'Det var en svår strid, utan segrare. {sp1.namn} tar ingen skada men går inte upp en nivå. \n\n{sp1.namn} är nu nivå {sp1.niva}')
-        else: #om spelaren förlorar
-            slag = random.randint(1, fiende.sty) #sp1 tar skada
-            text_utils.slow(f'{sp1.namn} blev besegrad av {fiende.monstertyp} och förlorade {slag} kp. \n\n{sp1.namn} är nu nivå {sp1.niva + 1}')
-            sp1.skada += slag
-        
-        text_utils.slow(f"{sp1.namn} har {sp1.kp - sp1.skada} kp kvar.")
-        time.sleep(1)
-
+        valt_rum.gå_in(sp1)
     #SKATTKAMMARE, rum att få skatter i
 
     elif valt_rum.rumstyp == 'rum med skatter': 
