@@ -35,7 +35,7 @@ print('''
 
 input('Träd in i fängelshålan och ta med dig Poopfly:n på [RETUR]resan')
 
-sp1 = karaktar.skapa_karaktär()
+sp1:karaktar = karaktar.skapa_karaktär()
 
 print(sp1.namn)
 print('KP:', sp1.kp)
@@ -73,32 +73,21 @@ while True: #Hela spelloopen
                     Öppna en [D]örr
                     Kolla [F]ärdigheter 
                     -> ''').upper()
-        
         if val == 'R':
-            if len(sp1.inventarie) < 1:
-                print('Du har inga föremål')
-            for i in range(len(sp1.inventarie)):
-                print(f'{i+1}.{skatter.print_skatt(sp1.inventarie[i - 1])}\n')
+            sp1.print_inventarie()
+        elif val == 'F': #printar spelarens färdigheter
+            sp1.print_färdigheter()
         elif val == 'D':
-            while True:
+            while val not in ['1','2','3','4']:
                 val = input(f'Vilken dörr vill du öppna? \n [1] {dörrbeskrivningar[0]} \n [2] {dörrbeskrivningar[1]} \n [3] {dörrbeskrivningar[2]} \n [4] Avbryt \n ->')
-                if val in ['1', '2', '3', '4']:
-                    break
-                else:
+                if val not in ['1', '2', '3', '4']:
                     text_utils.slow('Ogiltigt val: välj igen') #om spelaren inte väljer ett giltigt val.
-                    continue
             if val in ['1', '2', '3']: #om spelaren väljer att öppna en dörr
                 valt_rum = rumslista[int(val)-1]
                 text_utils.slow(f'{sp1.namn} kliver in i ett {valt_rum.rumstyp}\n') #rumstypen avsjöjas för spelaren
                 time.sleep(1)
                 break
 
-        elif val == 'F': #printar spelarens färdigheter
-            sp1.print_färdigheter()
-
-        else:
-            continue
-        
 # RUMSTYPER OCH HÄNDELSER
 
     # MONSTERRUM

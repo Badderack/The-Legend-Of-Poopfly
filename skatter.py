@@ -10,12 +10,12 @@ class skatt:
         skatt.beskrivning = beskrivning
         skatt.synergi_id = synergi_id
 
-def print_skatt(sak):
-    mod = 'mod'
-    if sak.mod_ar_mult == True:
-        mod = 'mult'
-    output = f' {sak.namn} | Kvalitet: {sak.kvalitet}\n  {sak.beskrivning}\n   KP {mod}: {sak.kpmod} | STY {mod}: {sak.stymod} | Nivå mod {sak.nivamod}'
-    return(output)
+    def __str__(self):
+        mod = 'mod'
+        if self.mod_ar_mult == True:
+            mod = 'mult'
+        output = f' {self.namn} | Kvalitet: {self.kvalitet}\n  {self.beskrivning}\n   KP {mod}: {self.kpmod} | STY {mod}: {self.stymod} | Nivå mod {self.nivamod}'
+        return(output)
 
 # skatt('NAMN', kp modifier, sty modifier, niva modifier, '"Beskrivning"')
 #Kvalitet 1 föremål
