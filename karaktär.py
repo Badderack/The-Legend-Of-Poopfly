@@ -24,6 +24,11 @@ class karaktar: #Strukturen för spelarkaraktären
         print(f"""{self.namn + self.plural} färdigheter:
 Nivå: {self.niva} | KP: {self.kp} / {self.kp + self.skada} | STY: {self.sty}
 """)
+    def print_inventarie(self):
+        if len(self.inventarie) < 1:
+            print('Du har inga föremål')
+        for i, skatt in enumerate(self.inventarie):
+            print(f'{i+1}.{skatter.print_skatt(skatt)}\n')
         
     def start_tur(self):
         self.ge_stats()
@@ -150,8 +155,7 @@ Nivå: {self.niva} | KP: {self.kp} / {self.kp + self.skada} | STY: {self.sty}
     
     def avskaffa_skatt(self): #Funktion för att ta bort/byta ut ett föremål i spelarens inventarie
         output = ''
-        for i in range(0, len(self.inventarie)):
-            output += f'{i + 1}. {skatter.print_skatt(self.inventarie[i])}\n\n'
+        self.print_inventarie() 
         print(output)
         while True:
             val = input(f'Vilken skatt i din ryggsäck vill du byta ut??->')

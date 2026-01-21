@@ -2,6 +2,7 @@ import random
 import time
 import skatter
 import text_utils
+import rum
 from karaktär import karaktar
 from monster import monster
 
@@ -62,37 +63,9 @@ sp1.starttid = time.time() #startar en timer för spelet
 
 while True: #Hela spelloopen
     sp1.start_tur()
-    rumstyp = ['monsterrum', 'monsterrum', 'monsterrum', 'monsterrum', 'monsterrum', 'monsterrum', 'rum med skatter', 'rum med skatter', 'skatterum', 'skatterum', 'bossrum', 'bossrum', 'läkerum', 'läkerum',] #lista med möjliga rumstyper. rumsantalen öker/sänker oddsen att stöta på vissa rum
-    for i in range(len(sp1.inventarie)): #lägger till fällor baserat på hur många föremål spelaren har
-        rumstyp.append('fällrum') 
-    while len(rumstyp) > 3: #tar bort rum tills det bara är tre kvar
-        rumstyp.pop(random.randint(0, len(rumstyp)-1)) 
-    random.shuffle(rumstyp) #slumpar ordningen på rummen
-    dorrbeskrivningar = [] #tom lista för dörrbeskrivningar
-    for i in rumstyp:
-        if i == 'monsterrum':
-            dorrbeskrivningar.append('mörk dörr med blodfläckar...')
-        elif i == 'rum med skatter':
-            dorrbeskrivningar.append('trädörr med en gyllene ram...')
-        elif i == 'skatterum':
-            dorrbeskrivningar.append('gyllene dörr med en träram...')
-        elif i == 'bossrum':
-            dorrbeskrivningar.append('asstor port med en dödskalle på...')
-        elif i == 'läkerum':
-            dorrbeskrivningar.append('dörr med ett välkomnande ljus bakom...')
-        elif i == 'fällrum':
-            har_teleskop = False
-            for i in sp1.inventarie: 
-                if i.namn == "Teleskop": # en skatt som låter spelaren se fällor
-                    har_teleskop = True
-            if har_teleskop == True:
-                dorrbeskrivningar.append(f'{sp1.namn} ser en gyllene dörr, men {sp1.namn + sp1.plural} teleskop låter dig se en fälla bakom...')
-            else:
-                falldorr = ['mörk dörr med blodfläckar...', 'trädörr med en gyllene ram...', 'gyllene dörr med en träram...', 'asstor port med en dödskalle på...', 'dörr med ett välkomnande ljus bakom...'] #standardbeskrivningar för att fylla ut listan
-                dorrbeskrivningar.append(falldorr[random.randint(0, len(falldorr)-1)]) #om spelaren inte har teleskopet får de en slumpmässig beskrivning
-        else:
-            text_utils.slow('något har gått riktigt fel här... slut på det roliga :/') #errormeddelande som inte bör dyka upp.
-    text_utils.slow(f'{sp1.namn} ser tre dörrar: \n en {dorrbeskrivningar[0]} \n en {dorrbeskrivningar[1]} \n och en {dorrbeskrivningar[2]}\n')
+    rumslista: list[rum.rum] = rum.rum.generera(sp1)
+    dörrbeskrivningar = [rummet.få_dörr_beskrivning(sp1) for rummet in rumslista]
+    text_utils.slow(f'{sp1.namn} ser tre dörrar: \n en {dörrbeskrivningar[0]} \n en {dörrbeskrivningar[1]} \n och en {dörrbeskrivningar[2]}\n')
 
     while True: #meny innan strid
         val = input('''Vad vill du göra?
@@ -108,19 +81,20 @@ while True: #Hela spelloopen
                 print(f'{i+1}.{skatter.print_skatt(sp1.inventarie[i - 1])}\n')
         elif val == 'D':
             while True:
-                val = input(f'Vilken dörr vill du öppna? \n [1] {dorrbeskrivningar[0]} \n [2] {dorrbeskrivningar[1]} \n [3] {dorrbeskrivningar[2]} \n [4] Avbryt \n ->')
+                val = input(f'Vilken dörr vill du öppna? \n [1] {dörrbeskrivningar[0]} \n [2] {dörrbeskrivningar[1]} \n [3] {dörrbeskrivningar[2]} \n [4] Avbryt \n ->')
                 if val in ['1', '2', '3', '4']:
                     break
                 else:
                     text_utils.slow('Ogiltigt val: välj igen') #om spelaren inte väljer ett giltigt val.
                     continue
             if val in ['1', '2', '3']: #om spelaren väljer att öppna en dörr
-                text_utils.slow(f'{sp1.namn} kliver in i ett {rumstyp[int(val)-1]}\n') #rumstypen avsjöjas för spelaren
+                valt_rum = rumslista[int(val)-1]
+                text_utils.slow(f'{sp1.namn} kliver in i ett {valt_rum.rumstyp}\n') #rumstypen avsjöjas för spelaren
                 time.sleep(1)
                 break
 
         elif val == 'F': #printar spelarens färdigheter
-            print(f'{sp1.namn + sp1.plural} färdigheter:\n  Nivå: {sp1.niva} | KP: {sp1.kp} / {sp1.kp + sp1.skada} | STY: {sp1.sty}\n')
+            sp1.print_färdigheter()
 
         else:
             continue
@@ -129,7 +103,7 @@ while True: #Hela spelloopen
 
     # MONSTERRUM
 
-    if rumstyp[int(val)-1] == 'monsterrum':
+    if valt_rum.rumstyp == 'monsterrum':
         sp1.start_tur() #uppdaterar spelarens stats en funktion
         fiende = monster.generera_monster(sp1)
         text_utils.slow(f"{fiende.genus} {fiende.monstertyp} dyker upp!")
@@ -173,7 +147,7 @@ while True: #Hela spelloopen
 
     #SKATTKAMMARE, rum att få skatter i
 
-    elif rumstyp[int(val)-1] == 'rum med skatter': 
+    elif valt_rum.rumstyp == 'rum med skatter': 
         tillvunnet_foremal = skatter.generera_skatt(61, 81, 96)
         mod = 'mod'
         if tillvunnet_foremal.mod_ar_mult == True:
@@ -185,7 +159,7 @@ while True: #Hela spelloopen
         while True:
             val = input('Vill du plocka upp den? J/N -> ').upper()
             if val == 'J':
-                sp1.tilvinna_skatt(sp1, tillvunnet_foremal)
+                sp1.tilvinna_skatt(tillvunnet_foremal)
                 text_utils.slow(f'{sp1.namn} plockar upp {tillvunnet_foremal.namn}')
                 break
             elif val == 'N':
@@ -196,7 +170,7 @@ while True: #Hela spelloopen
 
     # SKATTERUM, rum att betala skatt i
 
-    elif rumstyp[int(val)-1] == 'skatterum':
+    elif valt_rum.rumstyp == 'skatterum':
         text_utils.slow(f'{sp1.namn} kliver in i en mörk beskattningskammare')
         time.sleep(1)
         text_utils.slow(f'{sp1.namn} ser en dvärg i andra änden av rummet')
@@ -221,11 +195,11 @@ while True: #Hela spelloopen
             sp1.skada += 2
             text_utils.slow(f'Dvärgen drar sitt svärd och hugger {sp1.namn}\n\n{sp1.namn} har nu {sp1.kp - sp1.skada} KP kvar')
         elif val == 'S':
-            text_utils.slow(sp1.avskaffa_skatt(sp1))
+            text_utils.slow(sp1.avskaffa_skatt())
 
     #EN BOSS
 
-    elif rumstyp[int(val)-1] == 'bossrum':
+    elif valt_rum.rumstyp == 'bossrum':
         sp1.start_tur()
         fiende = monster.generera_boss(sp1)
         text_utils.slow(f'I ett bossrum kommer turer att utkämpas tills spelaren eller bossen är döda. Spelaren kommer bli slagen upp till bossens sty och spelaren slår upp till sin sty, mellan varje tur kan föremål användas.\n')
@@ -308,7 +282,7 @@ while True: #Hela spelloopen
         while True:
             val = input('\n\nVill du plocka upp den? J/N ->').upper()
             if val == 'J':
-                sp1.tilvinna_skatt(sp1, tillvunnet_foremal)
+                sp1.tilvinna_skatt(tillvunnet_foremal)
                 break
             elif val == 'N':
                 break
@@ -318,7 +292,7 @@ while True: #Hela spelloopen
 
     # LÄKERUM, spelaren helas
 
-    elif rumstyp[int(val)-1] == 'läkerum':
+    elif valt_rum.rumstyp == 'läkerum':
         val = sp1.skada
         sp1.skada = sp1.skada - random.randint(1, sp1.kp//2) #spelaren läker mellan 1 och halva sin kp
         if sp1.skada <= 0:
@@ -328,7 +302,7 @@ while True: #Hela spelloopen
     
     # FÄLLA, spelaren tar skada
     
-    elif rumstyp[int(val)-1] == 'fällrum':
+    elif valt_rum.rumstyp == 'fällrum':
         fallskada = random.randint(0, sp1.kp//2) # Spelaren kan ta upp till halva sin kp i skada
         if fallskada == 0:
             text_utils.slow(f'OJ! {sp1.namn} klev in i en FÄLLA men undvek den, ingen skada tagen!\n\n')
