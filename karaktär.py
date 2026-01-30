@@ -28,7 +28,7 @@ Nivå: {self.niva} | KP: {self.kp} / {self.kp + self.skada} | STY: {self.sty}
         if len(self.inventarie) < 1:
             print('Du har inga föremål')
         for i, skatt in enumerate(self.inventarie):
-            print(f'{i+1}.{skatter.print_skatt(skatt)}\n')
+            print(f'{i+1}.{str(skatt)}\n')
         
     def start_tur(self):
         self.ge_stats()
@@ -82,7 +82,7 @@ Nivå: {self.niva} | KP: {self.kp} / {self.kp + self.skada} | STY: {self.sty}
                         self.inventarie.remove(synergi_skatt)
             self.inventarie.append(skatter.skatt('Improviserad ELDKASTARE', -2, 5, 0, '"BOCKEN BRINNER!!!"', 0))
             self.inventarie[-1].kvalitet = 'SYNERGI'
-            print(skatter.print_skatt(self.inventarie[-1]))
+            print(str(self.inventarie[-1]))
         
         if a.get(2) == 2: #Synergi 2: Släpp lös det oönskade
             for p in range(2):
@@ -96,7 +96,7 @@ Nivå: {self.niva} | KP: {self.kp} / {self.kp + self.skada} | STY: {self.sty}
                         self.inventarie.remove(synergi_skatt)
             self.inventarie.append(skatter.skatt('Det oönskade...', -100, 30, 4, '"...borde alldrig ha öppnat asken"', 0))
             self.inventarie[-1].kvalitet = 'SYNERGI'
-            print(skatter.print_skatt(self.inventarie[-1]))
+            print(str(self.inventarie[-1]))
 
         if a.get(3) == 3: #Synergi 3: Dev console
             del a[3]
@@ -150,7 +150,7 @@ Nivå: {self.niva} | KP: {self.kp} / {self.kp + self.skada} | STY: {self.sty}
                         self.inventarie.remove(synergi_skatt)
             self.inventarie.append(skatter.skatt('Revolver', 0, 20, 0, '"Siv Olgors revolver"', 0))
             self.inventarie[-1].kvlitet = 'SYNERGI'
-            print(skatter.print_skatt(self.inventarie[-1]))
+            print(str(self.inventarie[-1]))
     time.sleep(1)
     
     def avskaffa_skatt(self): #Funktion för att ta bort/byta ut ett föremål i spelarens inventarie

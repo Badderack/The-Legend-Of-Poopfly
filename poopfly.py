@@ -1,10 +1,8 @@
 import random
 import time
-import skatter
 import text_utils
 import rum
 from karaktär import karaktar
-from monster import monster
 from monsterrum import monsterrum
 from rum_med_skatter import rum_med_skatter
 from skatterum import skatterum
@@ -66,7 +64,7 @@ attackbeskrivning = [f'slår {sp1.namn}', f'sparkar {sp1.namn}', f'klöser {sp1.
 
 sp1.starttid = time.time() #startar en timer för spelet
 
-def generera(spelare) -> list:
+def generera_rum(spelare) -> list:
     rumstyp = ['monsterrum']*6+['rum med skatter']*2+['skatterum']*2+['bossrum']*2+['läkerum']*2
     rumstyp += ['fällrum']*len(spelare.inventarie)#lägger till fällor baserat på hur många föremål spelaren har
     while len(rumstyp) > 3: #tar bort rum tills det bara är tre kvar
@@ -90,7 +88,7 @@ def generera(spelare) -> list:
 
 while True: #Hela spelloopen
     sp1.start_tur()
-    rumslista: list[rum.rum] = rum.rum.generera(sp1)
+    rumslista: list[rum.rum] = generera_rum(sp1)
     dörrbeskrivningar = [rummet.få_dörr_beskrivning(sp1) for rummet in rumslista]
     text_utils.slow(f'{sp1.namn} ser tre dörrar: \n en {dörrbeskrivningar[0]} \n en {dörrbeskrivningar[1]} \n och en {dörrbeskrivningar[2]}\n')
 
@@ -115,4 +113,4 @@ while True: #Hela spelloopen
                 time.sleep(1)
                 break
 
-    valt_rum.gå_in()
+    valt_rum.gå_in(sp1)

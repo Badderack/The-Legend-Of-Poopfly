@@ -13,7 +13,7 @@ class rum_med_skatter(rum):
         tillvunnet_foremal = skatter.generera_skatt(61, 81, 96)
         text_utils.slow('I skattkammaren finns det:\n')
         time.sleep(1)
-        print(f'  {skatter.print_skatt(tillvunnet_foremal)}')
+        print(f'  {str(tillvunnet_foremal)}')
         time.sleep(1)
         while True:
             val = input('Vill du plocka upp den? J/N -> ').upper()

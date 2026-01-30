@@ -33,7 +33,7 @@ class bossrum(rum):
                     if len(spelare.inventarie) < 1:
                         print('Du har inga föremål')
                     for i in range(len(spelare.inventarie)):
-                        print(f'{i+1}.{skatter.print_skatt(spelare.inventarie[i - 1])}\n')
+                        print(f'{i+1}.{str(spelare.inventarie[i - 1])}\n')
                 elif val == 'B':
                     break
                 elif val == 'F':
@@ -90,7 +90,7 @@ class bossrum(rum):
             mod = 'mult'
         text_utils.slow('I skattkammaren finns det:')
         time.sleep(1)
-        text_utils.slow(f'  {skatter.print_skatt(tillvunnet_foremal)}\n')
+        text_utils.slow(f'  {str(tillvunnet_foremal)}\n')
         while True:
             val = input('\n\nVill du plocka upp den? J/N ->').upper()
             if val == 'J':

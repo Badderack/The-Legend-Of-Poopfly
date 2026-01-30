@@ -1,15 +1,4 @@
 import random
-import monster
-import text_utils
-import time
-import karaktär
-import skatter
-from monsterrum import monsterrum
-from rum_med_skatter import rum_med_skatter
-from skatterum import skatterum
-from bossrum import bossrum
-from läkerum import läkerum
-from fällrum import fällrum
 
 class rum:
     def __init__(self):

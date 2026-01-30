@@ -1,6 +1,5 @@
 import text_utils
 import time
-import skatter
 def vinn(spelare):
     #Vinnst men har slut på kp samtidigt
     sluttid = time.time() #stoppar timern
@@ -59,9 +58,9 @@ def vinn(spelare):
             elif val == 'F': #printar spelarens färdigheter
                 spelare.print_färdigheter()
 
-def förlust(spelare, starttid):
+def förlust(spelare):
     sluttid = time.time() #stoppar timern
-    text_utils.slow(f'Du har FÖRLORAT SPELET! \n Det tog dig {int(sluttid - starttid)} sekunder')
+    text_utils.slow(f'Du har FÖRLORAT SPELET! \n Det tog dig {int(sluttid - spelare.starttid)} sekunder')
     while True: #Liten meny där man kan kolla sina stats och föremål innan man stänger ner spelet
         val = input('Tryck [F] för att kolla dina stats presis innan du dog, [R] för att kolla rygsäcken eller Tryck [D] för att avsluta spelet').upper()
         if val == 'R': #printar inventroty

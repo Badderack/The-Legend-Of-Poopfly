@@ -1,7 +1,7 @@
 from rum import rum
 import text_utils
 import time
-import monster
+from monster import monster
 import karaktär
 import random
 
