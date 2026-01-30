@@ -5,6 +5,12 @@ import text_utils
 import rum
 from karaktär import karaktar
 from monster import monster
+from monsterrum import monsterrum
+from rum_med_skatter import rum_med_skatter
+from skatterum import skatterum
+from bossrum import bossrum
+from läkerum import läkerum
+from fällrum import fällrum
 
 print('''
                                 _____ _
@@ -60,6 +66,27 @@ attackbeskrivning = [f'slår {sp1.namn}', f'sparkar {sp1.namn}', f'klöser {sp1.
 
 sp1.starttid = time.time() #startar en timer för spelet
 
+def generera(spelare) -> list:
+    rumstyp = ['monsterrum']*6+['rum med skatter']*2+['skatterum']*2+['bossrum']*2+['läkerum']*2
+    rumstyp += ['fällrum']*len(spelare.inventarie)#lägger till fällor baserat på hur många föremål spelaren har
+    while len(rumstyp) > 3: #tar bort rum tills det bara är tre kvar
+        rumstyp.pop(random.randint(0, len(rumstyp)-1)) 
+    random.shuffle(rumstyp) #slumpar ordningen på rumme
+    rumslista = []
+    for rumsräng in rumstyp:
+        if rumsräng == 'monsterrum':
+            rumslista.append(monsterrum())
+        elif rumsräng == 'rum med skatter':
+            rumslista.append(rum_med_skatter())
+        elif rumsräng == 'skatterum':
+            rumslista.append(skatterum())
+        elif rumsräng == 'bossrum':
+            rumslista.append(bossrum())
+        elif rumsräng == 'läkerum':
+            rumslista.append(läkerum())
+        elif rumsräng == 'fällrum':
+            rumslista.append(fällrum())
+    return rumslista 
 
 while True: #Hela spelloopen
     sp1.start_tur()
