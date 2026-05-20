@@ -2,13 +2,13 @@ from random import randint
 class skatt:
     kvalitet = 1
     mod_ar_mult = False
-    def __init__(skatt, namn, kpmod, stymod, nivamod, beskrivning, synergi_id):
-        skatt.namn = namn
-        skatt.kpmod = kpmod
-        skatt.stymod = stymod
-        skatt.nivamod = nivamod
-        skatt.beskrivning = beskrivning
-        skatt.synergi_id = synergi_id
+    def __init__(self, namn, kpmod, stymod, nivamod, beskrivning, synergi_id):
+        self.namn = namn
+        self.kpmod = kpmod
+        self.stymod = stymod
+        self.nivamod = nivamod
+        self.beskrivning = beskrivning
+        self.synergi_id = synergi_id
 
     def __str__(self):
         mod = 'mod'

@@ -43,7 +43,7 @@ class bossrum(rum):
 
 
             slag = random.randint(1, fiende.sty) #fiendens attack
-            text_utils.slow(f'{fiende.monstertyp} {self.få_attackbeskrivning()} och gör {slag} skada!\n') #beskriver attacken från slumplistan attackbeskrivning
+            text_utils.slow(f'{fiende.monstertyp} {self.få_attackbeskrivning(spelare)} och gör {slag} skada!\n') #beskriver attacken från slumplistan attackbeskrivning
             spelare.skada += slag #spelaren tar slag skada
             time.sleep(1)
             slag = random.randint(1, spelare.sty) #spelares attack
@@ -83,7 +83,7 @@ class bossrum(rum):
                 tillvunnet_foremal = skatter.k1[random.randint(0, len(skatter.k1) - 1)]
                 skatter.k1.remove(tillvunnet_foremal)
             else:
-                tillvunnet_foremal = skatter.skatt('Poopfly', -100, -100, 10, '"Wow, den suger verkligen mer än vad jag trodde..."')
+                tillvunnet_foremal = skatter.skatt('Poopfly', -100, -100, 10, '"Wow, den suger verkligen mer än vad jag trodde..."',0)
             break
         mod = 'mod'
         if skatter.skatt.mod_ar_mult == True:

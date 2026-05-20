@@ -17,7 +17,7 @@ class karaktar: #Strukturen för spelarkaraktären
         self.kp = kp
         self.sty = sty
         self.niva = niva
-        self.starttid = 0
+        self.starttid = 0.0
         self.plural = "" if self.namn[-1] == 's' else "s" # Kollar om spelarens namn slutar på s, och följer gramatikregler för plural
     
     def print_färdigheter(self):
@@ -117,9 +117,9 @@ Nivå: {self.niva} | KP: {self.kp} / {self.kp + self.skada} | STY: {self.sty}
                 for p in self.inventarie:
                     if p.synergi_id != 0:
                         print(f'{p.namn}, ')
-            self.inventarie.append(self.skatt('Developer Console', 3, 15, 4, '"/level add 2"', 0))
+            self.inventarie.append(skatter.skatt('Developer Console', 3, 15, 4, '"/level add 2"', 0))
             self.inventarie[-1].kvalitet = 'SYNERGI'
-            print(self.print_skatt(self.inventarie[-1]))
+            print(self.inventarie[-1])
 
         if a.get(4) == 2: #Synergi 4: 
             text_utils.slow(f'Universumförstare och Helig utplånare börjar att lysa och låta från {self.namn + self.plural} väska')
@@ -131,7 +131,7 @@ Nivå: {self.niva} | KP: {self.kp} / {self.kp + self.skada} | STY: {self.sty}
                 for synergi_skatt in self.inventarie:
                     if synergi_skatt.synergi_id == 4:
                         self.inventarie.remove(synergi_skatt)
-            self.inventarie.append(skatter.skatt('Poopfly', -100, -100, 10, '"Wow, den suger verkligen mer än vad jag trodde..."'), 0)
+            self.inventarie.append(skatter.skatt('Poopfly', -100, -100, 10, '"Wow, den suger verkligen mer än vad jag trodde..."', 0))
             self.inventarie[-1].kvalitet = 0
 
         if a.get(5) == 2:
@@ -173,6 +173,7 @@ Nivå: {self.niva} | KP: {self.kp} / {self.kp + self.skada} | STY: {self.sty}
         if len(self.inventarie) > 5:
             self.avskaffa_skatt()
 
+    @staticmethod
     def skapa_karaktär():
         fnamn = ['Isak', 'Pelle', 'Ludvig', 'Anton', 'Lizi', 'Edmund', 'Bertholowmew', 'gon', 'gon', 'gon', 'Filip', 'Holger', 'Oskar'] 
         enamn = [', den fördärvade', ' Bajs', ' McMillen', ' Döden', ' Nilsson', ' Rosencrantz', ' O´ Moriah', ' Kall', ' Von Ormbarst', ', den trosfanatiska', ', den skurna', ', den oupplysta', ', den enigmatiska', ', den godtyckliga', '']
